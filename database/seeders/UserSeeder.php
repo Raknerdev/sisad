@@ -15,29 +15,35 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name'=> 'Rakner',
-            'email'=> 'Rakner@sisad.com',
-            'password'=> bcrypt('1598753')
+            'username'=>'Rakner',
+            'name'=>'Pedro',
+            'last_name'=>'Alvarez',
+            'email'=>'Rakner@sisad.com',
+            'password'=>bcrypt('1598753')
         ])->assignRole('root');
+
         User::create([
+            'username'=>'admin',
             'name'=> 'admin',
+            'last_name'=>'admin',
             'email'=> 'admin@sisad.com',
             'password'=> bcrypt('admin')
         ])->assignRole('admin');
+
         User::create([
-            'name'=> 'facuración',
-            'email'=> 'facuracion@sisad.com',
-            'password'=> bcrypt('facturacion')
-        ])->assignRole('facturacion');
-        User::create([
-            'name'=> 'facuración2',
-            'email'=> 'facuracion2@sisad.com',
-            'password'=> bcrypt('12345678')
-        ])->assignRole('facturacion');
-        User::create([
+            'username'=>'tesoreria',
             'name'=> 'tesoreria',
+            'last_name'=>'user',
             'email'=> 'tesoreria@sisad.com',
             'password'=> bcrypt('tesoreria')
         ])->assignRole('tesoreria');
+
+        User::create([
+            'username'=>'facturacion',
+            'name'=> 'facuración',
+            'last_name'=>'user',
+            'email'=> 'facuracion@sisad.com',
+            'password'=> bcrypt('facturacion')
+        ])->assignRole('facturacion');        
     }
 }

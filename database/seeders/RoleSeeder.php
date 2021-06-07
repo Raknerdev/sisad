@@ -22,8 +22,18 @@ class RoleSeeder extends Seeder
         $r_RRHH = Role::create(['name' => 'rrhh']);
         
         Permission::create(['name' => 'crear usuario'])->syncRoles([$r_root, $r_admin]);
-        Permission::create(['name' => 'crear factura'])->syncRoles([$r_root, $r_Facturation, $r_admin]);
-        Permission::create(['name' => 'editar factura'])->syncRoles([$r_root, $r_Facturation, $r_admin]);
-        Permission::create(['name' => 'eliminar factura'])->assignRole($r_root);
+        // permisos modulo de facturacion
+        Permission::create(['name' => 'crear factura venta'])->syncRoles([$r_root, $r_Facturation, $r_admin]);
+        Permission::create(['name' => 'editar factura venta'])->syncRoles([$r_root, $r_Facturation, $r_admin]);
+        Permission::create(['name' => 'eliminar factura venta'])->assignRole($r_root);
+        Permission::create(['name' => 'crear factura compra'])->syncRoles([$r_root, $r_Facturation, $r_admin]);
+        Permission::create(['name' => 'editar factura compra'])->syncRoles([$r_root, $r_Facturation, $r_admin]);
+        Permission::create(['name' => 'eliminar factura compra'])->assignRole($r_root);
+        Permission::create(['name' => 'crear nota de entrega'])->syncRoles([$r_root, $r_Facturation, $r_admin]);
+        Permission::create(['name' => 'editar nota de entrega'])->syncRoles([$r_root, $r_Facturation, $r_admin]);
+        Permission::create(['name' => 'eliminar nota de entrega'])->assignRole($r_root);
+        Permission::create(['name' => 'crear guia despacho'])->syncRoles([$r_root, $r_Facturation, $r_admin]);
+        Permission::create(['name' => 'editar guia despacho'])->syncRoles([$r_root, $r_Facturation, $r_admin]);
+        Permission::create(['name' => 'eliminar guia despacho'])->assignRole($r_root);
     }
 }
