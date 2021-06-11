@@ -17,8 +17,13 @@ Route::get('/', 'App\Http\Controllers\InicioController@index');
 Route::get('login', 'App\Http\Controllers\admin\PermisoController@index')->name('login');
 Route::get('personal', 'App\Http\Controllers\admin\UsersController@index')->name('personal');
 // Facturacion
+
+    // Prroductos
+Route::get('productos','App\Http\Controllers\admin\ProductosController@index');
+Route::post('agregar_producto','App\Http\Controllers\admin\ProductosController@create');
+
     // Facturacion Venta
-Route::get('crear_factura_venta', 'App\Http\Controllers\facturacion\VentaController@create')->name('crear_fv');
+Route::post('crear_factura_venta', 'App\Http\Controllers\facturacion\VentaController@create')->name('crear_fv');
     // Facturacion Compra
 Route::get('crear_factura_compra', 'App\Http\Controllers\facturacion\CompraController@create')->name('crear_fc');
 

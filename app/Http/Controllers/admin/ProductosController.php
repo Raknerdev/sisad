@@ -15,7 +15,9 @@ class ProductosController extends Controller
      */
     public function index()
     {
-        //
+        // return view('productos.index');
+        $products = Productos::orderBy('id')->get();
+        return view('productos.index', compact('products'));
     }
 
     /**
@@ -23,9 +25,28 @@ class ProductosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        // Para hacer que los productos se cuenten 
+        // $c= Productos::orderBy('id_producto', 'desc')->first();
+        // if ($c){
+        // $id = $c->id_recibido + 1;
+        // }else{
+        // $id = 1;
+        // }
+
+        $prod = new Productos();
+        $prod -> codigo = $request->codigo;
+        $prod -> name = $request->nombre;
+        $prod -> precio_vip = $request->precio_vip;
+        $prod -> precio_m = $request->precio_mayor;
+        $prod -> precio_d = $request->precio_detal;
+        $prod -> save();
+
+
+        // $products = Productos::orderBy('id')->get();
+        // return view('productos.index', compact('products'));
+        return back();
     }
 
     /**
