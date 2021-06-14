@@ -5,47 +5,66 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\admin\Productos;
+use App\Models\admin\Clientes;
+use App\Models\admin\Permiso;
 
-class ProductosController extends Controller
+class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function clientes()
+    {
+        $clientes = Clientes::orderBy('id')->get();
+        return view('admin.clientes', compact('clientes'));
+    }
+
+    public function aggCliente(Request $request)
+    {
+        // Para hacer que los productos se cuenten 
+        $c= Clientes::orderBy('nro_cliente', 'desc')->first();
+        if ($c){
+        $id = $c->nro_cliente + 1;
+        }else{
+        $id = 1;
+        }
+
+        $cliente = new Clientes();
+        $cliente->nro_cliente = $id;
+        $cliente->codigo = 'CLT' . str_pad($id, 3, '0', STR_PAD_LEFT);
+        $cliente-> nombre = $request->nombre;
+        $cliente-> cedula = $request->cedula;
+        $cliente-> direccion = $request->direccion;
+        $cliente-> telefono = $request->telefono;
+        $cliente-> tipo = $request->tipo;
+        $cliente-> save();
+
+        return back();
+    }
+    public function productos()
     {
         // return view('productos.index');
         $products = Productos::orderBy('id')->get();
-        return view('productos.index', compact('products'));
+        return view('admin.productos', compact('products'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
+    public function aggProducto(Request $request)
     {
         // Para hacer que los productos se cuenten 
-        // $c= Productos::orderBy('id_producto', 'desc')->first();
-        // if ($c){
-        // $id = $c->id_recibido + 1;
-        // }else{
-        // $id = 1;
-        // }
+        $c= Productos::orderBy('id_producto', 'desc')->first();
+        if ($c){
+        $id = $c->id_producto + 1;
+        }else{
+        $id = 1;
+        }
 
         $prod = new Productos();
-        $prod -> codigo = $request->codigo;
+        $prod -> id_producto = $id;
+        $prod -> codigo = 'ART-' . str_pad($id, 3, '0', STR_PAD_LEFT);
         $prod -> name = $request->nombre;
         $prod -> precio_vip = $request->precio_vip;
         $prod -> precio_m = $request->precio_mayor;
         $prod -> precio_d = $request->precio_detal;
         $prod -> save();
 
-
-        // $products = Productos::orderBy('id')->get();
-        // return view('productos.index', compact('products'));
         return back();
     }
 
@@ -55,9 +74,10 @@ class ProductosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function personal()
     {
-        //
+        $users = Permiso::orderBy('id')->get();
+        return view('admin.personal', compact('users'));
     }
 
     /**

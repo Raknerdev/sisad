@@ -1,6 +1,6 @@
 @extends("theme.$theme.layout")
 @section('titulo')
-    Personal
+    Productos
 @endsection
 @section('contenido')
 {{--  Modal Agregar Producto --}}
@@ -9,44 +9,34 @@
         <div class="modal-content">
             <div class="modal-header row d-inline">
                 <button type="button" class="close mr-1" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title text-center ml-4">Agregar Cliente</h4>
+                <h4 class="modal-title text-center ml-4">Agregar Producto</h4>
             </div>
             <div class="modal-body text-center">
-                <form class="form-horizontal" role="form" method="POST" action="/agregar_cliente" enctype="multipart/form-data"  id="form-nuevo">
-                    @csrf
+                <form class="form-horizontal" role="form" method="POST" action="{{url('agregar_producto')}}" enctype="multipart/form-data"  id="form-nuevo">
+                    {{ csrf_field() }}
                     <div class="form-group row">
-                        <label for="nombre" class="control-label col-sm-6">Nombre</label>
+                        <label for="nombre" class="control-label col-sm-6">Nombre de producto</label>
                         <div class="col-6">
-                            <input class="form-control" id="nombre" type="text" name="nombre" placeholder="Fernando Miranda" pattern="[A-Za-z ]{1,15}" required>
+                            <input class="form-control" id="nombre" type="text" name="nombre" placeholder="MIXTO" pattern="[A-Za-z]{1,20}" style="text-transform:uppercase;" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="cedula" class="control-label col-sm-6">Cédula</label>
+                        <label for="precio_vip" class="control-label col-sm-6">Precio VIP</label>
                         <div class="col-6">
-                            <input class="form-control" id="cedula" type="text" name="cedula" placeholder="12.131.531" pattern="[0-9.]{1,10}" required>
+                            <input class="form-control" id="precio_vip" type="text" name="precio_vip" placeholder="4.50" pattern="[0-9.]{1,10}" style="text-transform:uppercase;" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="direccion" class="control-label col-sm-6">Dirección</label>
+                        <label for="precio_mayor" class="control-label col-sm-6">Precio al Mayor</label>
                         <div class="col-6">
-                            <input class="form-control" id="direccion" type="text" name="direccion" placeholder="Las Adjuntas">
+                            <input class="form-control" id="precio_mayor" type="text" name="precio_mayor" placeholder="2.80" pattern="[0-9.]{1,10}" style="text-transform:uppercase;" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="telefono" class="control-label col-sm-6">Teléfono</label>
+                        <label for="precio_detal" class="control-label col-sm-6">Precio al Detal</label>
                         <div class="col-6">
-                            <input class="form-control" id="telefono" type="text" name="telefono" placeholder="(0424)112-0011" pattern="[0-9_-+()]{1,15}">
+                            <input class="form-control" id="precio_detal" type="text" name="precio_detal" placeholder="0.90" pattern="[0-9.]{1,10}" style="text-transform:uppercase;" required>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="tipo" class="control-label col-sm-6">Tipo de Cliente</label>
-                        <div class="col-6">
-                            <select class="form-control" name="tipo">
-                              <option value="Minorista">Minorista</option>
-                              <option value="Mayorista">Mayorista</option>
-                              <option value="VIP">VIP</option>
-                            </select>
-                          </div>
                     </div>
                     <div class="form-group modal-footer d-inline">
                         <button type="submit" class="btn btn-primary float-left ml-5" id="btn-nuevo">
@@ -84,7 +74,7 @@
                 <h3  class="d-inline">Lista de Productos</h3>
                 <button class="d-inline btn btn-info shadow float-right" id="btn-creacion" 
                 data-toggle="modal" data-target="#creacion" name="Agregar Producto">
-                    Agregar Cliente 
+                    Agregar Producto 
                 </button>
             </div>
             <!-- /.card-header -->
@@ -92,31 +82,31 @@
               <table id="productos" class="table table-bordered table-striped">
                 <thead class="text-center">
                     <tr>
-                        <th>ID</th>
-                        <th>Nombre de Usuario</th>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Correo</th>
+                        <th>Codigo</th>
+                        <th>Nombre de Producto</th>
+                        <th>Precio VIP</th>
+                        <th>Precio al Mayor</th>
+                        <th>Precio al Detal</th>
                         <th>Acción</th>
                       </tr>
                 </thead>
                 <tbody class="text-center">
-                  @foreach ($users as $user)
-                  <tr>
-                      <th>{{$user->id}}</th>
-                      <th>{{$user->username}}</th>
-                      <th>{{$user->name}}</th>
-                      <th>{{$user->last_name}}</th>
-                      <th>{{$user->email}}</th>
-                      <th>
-                        <div class="btn-group btn-group-sm bg-dark">
-                          <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                          <a href="#" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                          <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                        </div>
-                      </th>
-                  </tr>
-                  @endforeach
+                    @foreach ($products as $product)
+                    <tr>
+                        <th>{{$product->codigo}}</th>
+                        <th>{{$product->name}}</th>
+                        <th>{{$product->precio_vip}}$</th>
+                        <th>{{$product->precio_m}}$</th>
+                        <th>{{$product->precio_d}}$</th>
+                        <th class="text-center">
+                            <div class="btn-group btn-group-sm bg-dark">
+                                <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                <a href="#" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                            </div>
+                        </th>
+                    </tr>
+                    @endforeach
                 </tbody>
                 
               </table>
@@ -156,5 +146,3 @@
     });
 </script>
 @endsection
-
-            

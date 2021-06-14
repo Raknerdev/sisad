@@ -15,17 +15,28 @@ class CreateCompraTable extends Migration
     {
         Schema::create('compra', function (Blueprint $table) {
             $table->id();
-
-            $table->string('nro_control');
-            $table->string('nro_factura');
+            // Datos Factura
+            $table->enum('tipo_cliente', ['MINORISTA', 'MAYORISTA', 'VIP']);
+            $table->string('nro_ctrl_patio');
+            $table->string('nro_ctrl_factura');
             $table->date('fecha_emision');
+            $table->string('cod_cliente');
             $table->string('nombre_c');
             $table->string('cedula_c');
-            $table->enum('cliente', ['MINORISTA', 'MAYORISTA', 'VIP']);
             $table->string('telefono')->nullable();
             $table->string('direccion_c')->nullable();
+            // Relacion Productos aqui
+
+            // Seguimos con la factura
+            $table->float('total_peso_prod');
             $table->float('sub_total');
             $table->float('total');
+            // Datos para Reporte
+            $table->float('abono');
+            $table->float('resta');
+            $table->float('descuento');
+            $table->string('observacion')->nullable();
+            $table->enum('estado', ['Pendiente', 'Completada']);
 
             $table->timestamps();
             $table->charset = 'utf8mb4';

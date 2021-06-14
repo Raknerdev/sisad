@@ -22,55 +22,62 @@
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         {{--  Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library --}}
-        @auth
+
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="/reporte" class="nav-link">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
-              Dashboard
+              Reporte
             </p>
           </a>
         </li>
-        @endauth
         <li class="nav-item">
-          <a href="personal" class="nav-link">
+          <a href="/personal" class="nav-link">
             <i class="nav-icon fas fa-user"></i>
             <p>
               Personal
             </p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="/clientes" class="nav-link">
+            <i class="nav-icon fas fa-users"></i>
+            <p>
+              Clientes
+            </p>
+          </a>
+        </li>
         
         {{--  <li class="nav-header">FACTURACION</li>  --}}
         <li class="nav-item">
-          <a href="" class="nav-link">
+          <a href="" class="nav-link menu-is-opening menu-open">
             <i class="nav-icon fas fa-edit"></i>
             <p>
               Facturación
-              <i class="fas fa-angle-left right"></i>
+              {{--  <i class="fas fa-angle-left right"></i>  --}}
             </p>
           </a>
-          <ul class="nav nav-treeview">
+          <ul class="nav nav-treeview" style="display: block;">
             <li class="nav-item">
-              <a href="factura_venta" class="nav-link">
+              <a href="/factura_venta" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Facturas de Venta</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="factura_compra" class="nav-link">
+              <a href="/factura_compra" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Facturas de Compra</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="nota" class="nav-link">
+              <a href="/nota" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Notas de Entega</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="productos" class="nav-link">
+              <a href="/productos" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Productos</p>
               </a>
@@ -87,7 +94,7 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="personal" class="nav-link">
+              <a href="/personal" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Personal</p>
               </a>

@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\facturacion;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\admin\Permiso;
+use App\Models\facturacion\Reportes;
+use App\Models\User;
 
-class UsersController extends Controller
+class FacturacionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +17,26 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = Permiso::orderBy('id')->get();
-        return view('admin.personal', compact('users'));
+        //
     }
-
+    public function reporte()
+    {
+        $totalMonto = 0;
+        $totalAbono = 0;
+        $totalResta = 0;
+        $totalDescontado = 0;
+        $reportes = Reportes::orderBy('id')->get();
+        foreach ($reportes as $reporte) {
+            $total = $total + $reporte->id;
+        }
+        if ($reportes) {
+            return view('reports.reporte', compact('reportes',
+            'totalMonto','totalAbono','totalResta','totalDescontado'));
+        }else{
+            return view('reports.reporte', compact(
+            'totalMonto','totalAbono','totalResta','totalDescontado'));
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *
