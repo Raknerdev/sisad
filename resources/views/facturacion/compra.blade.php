@@ -3,89 +3,140 @@
     Factura de Compra
 @endsection
 @section('contenido')
+{{--  Modal Agregar Factura --}}
+<div class="modal fade" id="creacion" tabindex="-1" role="dialog" aria-labelledby="creacionLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header row d-inline">
+                <button type="button" class="close mr-1" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center ml-4">Crear Factura de Compra</h4>
+            </div>
+            <div class="modal-body text-center">
+                <form class="form-horizontal" role="form" method="POST" action="/agregar_compra" enctype="multipart/form-data"  id="form-nuevo">
+                    @csrf
+                    <div class="form-group row">
+                        <label for="cliente" class="control-label col-sm-6">Nombre de CLiente</label>
+                        <div class="col-6">
+                            <select class="form-control" name="cliente" id="cliente">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="producto" class="control-label col-sm-6">Producto</label>
+                        <div class="col-6">
+                            <select class="form-control" name="producto">
+                                <option value="Efectivo">Producto</option>
+                                <option value="Transferencia">Producto</option>
+                                <option value="Otro">Producto</option>
+                              </select>
+                        </div>
+                    </div>
 
-<a href="crear_factura_compra" class="btn btn-primary shadow mb-3 float-right">
-    <span class="text-white">
-        Crear Nueva Factura
-    </span>
-</a>
-<small>
-    <table class="bg-white table table-bordered text-black">
-        <tr>
-            <th colspan="7">
-                <img src="{{asset("assets/img/header.jpeg")}}" style="width: 40%;" alt="Consorcio Express">
-            </th>
-        </tr>
-        <tr>
-            <th rowspan="7" style="width: 15%;"></th>
-            <th>Tipo de cliente</th>
-            <th>Minorista</th>
-            <th>Nro. Control de Patio</th>
-            <th>00000</th>
-            <th>Nro. Control de Factura</th>
-            <th>00000</th>
-        </tr>
-        <tr>
-            <th>Fecha: </th>
-            <th></th>
-            <th colspan="4"></th>
-        </tr>
-        <tr>
-            <th colspan="2">Código de cliente:</th>
-            <th colspan="4"> 0 </th>
-        </tr>
-        <tr>
-            <th colspan="2">Nombre o razón social:</th>
-            <th colspan="4">Pedro Alvarez</th>
-        </tr>
-        <tr>
-            <th colspan="2">Cédula o Rif:</th>
-            <th colspan="4">00000000</th>
-        </tr>
-    
-        <tr>
-            <th colspan="2">Teléfono:</th>
-            <th colspan="4">00000000000</th>
-        </tr>
-    
-        <tr>
-            <th colspan="2">Domicilio Fiscal:</th>
-            <th colspan="4">Coche</th>
-        </tr>
-    
-        <tr class="text-center" style="background: #28a745; color: black">
-            <th colspan="7">
-                Factura de Compra
-            </th>
-        </tr>
-        <tr class="text-center">
-            <th>Ítem</th>
-            <th>Código</th>
-            <th colspan="3">Producto</th>
-            <th>Cantidad</th>
-            <th>Precio Unitario</th>
-        </tr>
-        {{--  Agregar Productos  --}}
-        <tr class="text-center">
-            <th>1</th>
-            <th>P003-MIX</th>
-            <th colspan="3">Mixto</th>
-            <th>90kg</th>
-            <th>0,80</th>
-        </tr>
-        {{--  Fin Lista de Productos  --}}
-        <tr class="text-center">
-            <th colspan="5">Total Cantidad de Producto</th>
-            <th colspan="2">72,00</th>
-        </tr>
-        <tr>
-            <th colspan="5" class="text-center align-bottom">Recibo Conforme</th>
-            <th colspan="2" class="text-center"><p>Sub Total: 72,00<br> 16% IVA: 11,52 <br> Total a Pagar: 83,52</p></th>
-        </tr>
-        <tr>
-            
-        </tr>
-    </table>
-</small>
+                    <div class="form-group modal-footer d-inline">
+                        <button type="submit" class="btn btn-primary float-left ml-5" id="btn-nuevo">
+                            Generar
+                        </button>
+                        <button type="button" class="btn btn-danger float-right mr-5" data-dismiss="modal">
+                            Cancelar
+                        </button>
+                    </div>
+                    {{--  Cargar Archivo
+                    <div class="form-group">
+                        <label for="c_documento" class="col-md-4 control-label">Archivo</label>
+                        <div class="col-md-6">
+                            <input type="file" required name="archivo" id="archivo" name="archivo"/>
+                        </div>
+                    </div>  
+                    --}}
+                </form>
+              <br><br>
+              {{$success = Session::get('success')}}
+              @if ($success)
+                  <div class="alert alert-success">
+                      <strong>!!Felicidades!!</strong>Se Creo el usuario Correctamente <br><br>
+                  </div>
+              @endif
+            </div>
+        </div>
+    </div>
+</div>
+{{--  Fin Modal Agregar Factura  --}}
 
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3  class="d-inline">Facturas de Venta</h3>
+                <button class="d-inline btn btn-info shadow float-right" id="btn-creacion" 
+                data-toggle="modal" data-target="#creacion" name="Agregar Producto">
+                    Nueva Factura 
+                </button>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="productos" class="table table-bordered table-striped">
+                <thead class="text-center">
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha de Emsión</th>
+                        <th>Nro. Factura</th>
+                        <th>Cliente</th>
+                        <th>Total</th>
+                        <th>Esatado</th>
+                        <th>Acción</th>
+                      </tr>
+                </thead>
+                <tbody class="text-center">
+                  @foreach ($facturas as $factura)
+                  <tr>
+                      <th>{{$factura->id}}</th>
+                      <th>{{$factura->created_at}}</th>
+                      <th>{{$factura->nro_ctrl_factura}}</th>
+                      <th>{{$factura->nombre_c}}</th>
+                      <th>{{$factura->total}}</th>
+                      <th>{{$factura->estado}}</th>
+                      <th>
+                        <div class="btn-group btn-group-sm bg-dark">
+                          <a href="/view_compra/{{$factura->id}}" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                          <a href="#" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                          <a href="/compra_destroy/{{$factura->id}}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                        </div>
+                      </th>
+                  </tr>
+                  @endforeach
+                </tbody>
+                
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+      </div>
+    </div>
+</div>
+@endsection
+@section('scripts')
+<script>
+    $(function() {
+        $('#btn-creacion').on('click', function () {
+            event.preventDefault();
+            var url =  "{{ url('/list_clientes')}}";
+            // console.log(url);
+            $.get(url, function(data, status)
+            {
+              var $el = $("#cliente");
+              $el.empty();
+              $.each(data, function(key,value) {
+                $el.append($("<option></option>")
+                   .attr("value", key+1).text(value.nombre));
+              });
+               console.log(data);
+            }).fail(function()
+            {
+               console.log("Error");
+            });
+          });
+        }
+    );
+</script>
 @endsection

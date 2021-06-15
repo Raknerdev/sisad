@@ -17,7 +17,7 @@
                     <div class="form-group row">
                         <label for="nombre" class="control-label col-sm-6">Nombre</label>
                         <div class="col-6">
-                            <input class="form-control" id="nombre" type="text" name="nombre" placeholder="Fernando Miranda" pattern="[A-Za-z ]{1,15}" required>
+                            <input class="form-control" id="nombre" type="text" name="nombre" placeholder="Fernando Miranda" pattern="[A-Z a-z ]{1,30}" required>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -81,7 +81,7 @@
       <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h3  class="d-inline">Lista de Productos</h3>
+                <h3  class="d-inline">Lista de Clientes</h3>
                 <button class="d-inline btn btn-info shadow float-right" id="btn-creacion" 
                 data-toggle="modal" data-target="#creacion" name="Agregar Producto">
                     Agregar Cliente 
@@ -106,8 +106,8 @@
                         <th>{{$cliente->codigo}}</th>
                         <th>{{$cliente->nombre}}</th>
                         <th>{{$cliente->tipo}}</th>
-                        <th>{{$cliente->nro_cliente}}</th>
-                        <th>{{$cliente->telefono}}$</th>
+                        <th>0</th>
+                        <th>0$</th>
                         <th class="text-center">
                             <div class="btn-group btn-group-sm bg-dark">
                                 <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
@@ -148,7 +148,7 @@
     $(function () {
         $("#productos").DataTable({
             "responsive": true,
-            "searching": false,
+            "searching": true,
             "lengthChange": false,
             "autoWidth": false,
             {{--  "buttons": ["excel", "pdf", "print"]  --}}

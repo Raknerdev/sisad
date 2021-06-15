@@ -16,9 +16,10 @@ class CreateVentaTable extends Migration
         Schema::create('venta', function (Blueprint $table) {
             $table->id();
             // Datos de Factura - Verificar
+            $table->integer('id_factura');
             $table->string('nro_factura');
             $table->string('nro_control');
-            $table->date('fecha_emision');
+            // $table->date('fecha_emision');
             $table->string('nombre_c');
             $table->string('cedula_c');
             $table->string('telefono')->nullable();
@@ -30,12 +31,14 @@ class CreateVentaTable extends Migration
             $table->float('total');
             $table->enum('tipo_cliente', ['Minorista', 'Mayorista', 'VIP']);
             $table->enum('forma_pago', ['Efectivo','Transferencia','Otro']);
+            // $table->enum('productos', ['']);
             // Datos para Reporte
-            $table->float('abono');
-            $table->float('resta');
-            $table->float('descuento');
+            $table->float('abono')->nullable()->default(0);
+            $table->float('resta')->nullable()->default(0);
+            $table->float('descuento')->nullable()->default(0);
             $table->string('observacion')->nullable();
-            $table->enum('estado', ['Pendiente', 'Completada']);
+            $table->enum('estado', ['Pendiente', 'Completada'])->default('Pendiente');
+            
             // Marca de Tiempo
             $table->timestamps();
             $table->charset = 'utf8mb4';

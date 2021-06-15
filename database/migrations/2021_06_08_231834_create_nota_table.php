@@ -16,11 +16,11 @@ class CreateNotaTable extends Migration
         Schema::create('nota', function (Blueprint $table) {
             $table->id();
             // Datos de Nota de Entrega
-            $table->date('fecha_emision');
+            // $table->date('fecha_emision');
             $table->string('nro_ctrl_patio');
             $table->string('nro_ctrl_factura');
             $table->string('cod_cliente');
-            $table->enum('cliente', ['Minorista', 'Mayorista', 'VIP']);
+            $table->enum('cliente', ['Minorista', 'Mayorista', 'VIP'])->default('Minorista');
             $table->string('nombre_c');
             $table->string('cedula_c');
             $table->string('telefono')->nullable();
@@ -30,12 +30,12 @@ class CreateNotaTable extends Migration
             // Datos de Reporte
             $table->float('total');
             $table->date('fecha_pago')->nullable();
-            $table->float('abono');
-            $table->float('debe');
-            $table->float('resta');
-            $table->float('descuento');
+            $table->float('abono')->nullable()->default(0);
+            $table->float('debe')->nullable()->default(0);
+            $table->float('resta')->nullable()->default(0);
+            $table->float('descuento')->nullable()->default(0);
             $table->string('observacion')->nullable();
-            $table->enum('estado', ['Pendiente', 'Completada']);
+            $table->enum('estado', ['Pendiente', 'Completada'])->default('Pendiente');
 
             $table->timestamps();
             $table->charset = 'utf8mb4';

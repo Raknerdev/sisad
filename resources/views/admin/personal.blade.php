@@ -9,44 +9,40 @@
         <div class="modal-content">
             <div class="modal-header row d-inline">
                 <button type="button" class="close mr-1" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title text-center ml-4">Agregar Cliente</h4>
+                <h4 class="modal-title text-center ml-4">Agregar Usuario</h4>
             </div>
             <div class="modal-body text-center">
-                <form class="form-horizontal" role="form" method="POST" action="/agregar_cliente" enctype="multipart/form-data"  id="form-nuevo">
+                <form class="form-horizontal" role="form" method="POST" action="/agregar_usuario" enctype="multipart/form-data"  id="form-nuevo">
                     @csrf
+                    <div class="form-group row">
+                        <label for="username" class="control-label col-sm-6">Nombre de Usuario</label>
+                        <div class="col-6">
+                            <input class="form-control" id="username" type="text" name="username" placeholder="fmiranda" pattern="[A-Za-z]{1,15}" required>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label for="nombre" class="control-label col-sm-6">Nombre</label>
                         <div class="col-6">
-                            <input class="form-control" id="nombre" type="text" name="nombre" placeholder="Fernando Miranda" pattern="[A-Za-z ]{1,15}" required>
+                            <input class="form-control" id="nombre" type="text" name="nombre" placeholder="Fernando " pattern="[A-Za-z ]{1,15}" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="cedula" class="control-label col-sm-6">Cédula</label>
+                        <label for="apellido" class="control-label col-sm-6">Apellido</label>
                         <div class="col-6">
-                            <input class="form-control" id="cedula" type="text" name="cedula" placeholder="12.131.531" pattern="[0-9.]{1,10}" required>
+                            <input class="form-control" id="apellido" type="text" name="apellido" placeholder="Miranda" pattern="[A-Za-z ]{1,15}" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="direccion" class="control-label col-sm-6">Dirección</label>
+                        <label for="correo" class="control-label col-sm-6">Correo</label>
                         <div class="col-6">
-                            <input class="form-control" id="direccion" type="text" name="direccion" placeholder="Las Adjuntas">
+                            <input class="form-control" id="correo" type="email" name="correo" placeholder="correo@correo.com">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="telefono" class="control-label col-sm-6">Teléfono</label>
+                        <label for="password" class="control-label col-sm-6">Contraseña</label>
                         <div class="col-6">
-                            <input class="form-control" id="telefono" type="text" name="telefono" placeholder="(0424)112-0011" pattern="[0-9_-+()]{1,15}">
+                            <input class="form-control" id="password" type="password" name="password" placeholder="*********">
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="tipo" class="control-label col-sm-6">Tipo de Cliente</label>
-                        <div class="col-6">
-                            <select class="form-control" name="tipo">
-                              <option value="Minorista">Minorista</option>
-                              <option value="Mayorista">Mayorista</option>
-                              <option value="VIP">VIP</option>
-                            </select>
-                          </div>
                     </div>
                     <div class="form-group modal-footer d-inline">
                         <button type="submit" class="btn btn-primary float-left ml-5" id="btn-nuevo">
@@ -81,10 +77,10 @@
       <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h3  class="d-inline">Lista de Productos</h3>
+                <h3  class="d-inline">Lista de Usuarios</h3>
                 <button class="d-inline btn btn-info shadow float-right" id="btn-creacion" 
                 data-toggle="modal" data-target="#creacion" name="Agregar Producto">
-                    Agregar Cliente 
+                    Agregar Usuario 
                 </button>
             </div>
             <!-- /.card-header -->

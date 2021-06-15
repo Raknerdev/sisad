@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\admin\Permiso;
 use App\Models\facturacion\Reportes;
+use App\Models\facturacion\FacVenta;
+use App\Models\facturacion\FacCompra;
+use App\Models\facturacion\NotaEntrega;
 use App\Models\User;
 
 class FacturacionController extends Controller
@@ -36,6 +39,56 @@ class FacturacionController extends Controller
             return view('reports.reporte', compact(
             'totalMonto','totalAbono','totalResta','totalDescontado'));
         }
+    }
+    public function venta()
+    {   
+        $facturas = FacVenta::orderBy('id')->get();
+        return view('facturacion.venta', compact('facturas'));
+    }
+    public function showVenta($id)
+    {
+        $venta = FacVenta::find($id);
+        return view('facturacion.fventa', compact('venta'));
+    }
+    public function destroyVenta($id)
+    {
+        $venta = FacVenta::find($id);
+        $venta->delete();
+        return back();
+    }
+
+    public function compra()
+    {   
+        $facturas = FacCompra::orderBy('id')->get();
+        return view('facturacion.compra', compact('facturas'));
+    }
+    public function showCompra($id)
+    {
+        $compra = FacCompra::find($id);
+        return view('facturacion.fcompra', compact('compra'));
+    }
+    public function destroyCompra($id)
+    {
+        $compra = FacCompra::find($id);
+        $compra->delete();
+        return back();
+    }
+
+    public function nota()
+    {   
+        $notas = NotaEntrega::orderBy('id')->get();
+        return view('facturacion.nota', compact('notas'));
+    }
+    public function showNota($id)
+    {
+        $nota = NotaEntrega::find($id);
+        return view('facturacion.fnota', compact('nota'));
+    }
+    public function destroyNota($id)
+    {
+        $nota = FacCompra::find($id);
+        $nota->delete();
+        return back();
     }
     /**
      * Show the form for creating a new resource.
