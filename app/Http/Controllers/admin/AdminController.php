@@ -47,6 +47,10 @@ class AdminController extends Controller
 
         return back();
     }
+    public function listProducts(){
+        $products = Productos::get();
+        return $products;
+    }
     public function productos()
     {
         // return view('productos.index');
@@ -68,9 +72,9 @@ class AdminController extends Controller
         $prod -> id_producto = $id;
         $prod -> codigo = 'ART-' . str_pad($id, 3, '0', STR_PAD_LEFT);
         $prod -> name = $request->nombre;
-        $prod -> precio_vip = $request->precio_vip;
-        $prod -> precio_m = $request->precio_mayor;
-        $prod -> precio_d = $request->precio_detal;
+        $prod -> VIP = $request->precio_vip;
+        $prod -> Mayorista = $request->precio_mayor;
+        $prod -> Minorista= $request->precio_detal;
         $prod -> save();
 
         return back();
@@ -130,7 +134,9 @@ class AdminController extends Controller
         $compra-> cedula_c = $cliente->cedula;
         $compra-> telefono = $cliente->telefono;
         $compra-> direccion_c = $cliente->direccion;
-        // $compra-> productos =;
+        
+        $compra-> productos = json_encode($request->producto);
+
         $compra-> total_peso_prod = 0;
         $compra-> sub_total = 0;
         $compra-> total = 0;

@@ -17,7 +17,7 @@
                     <div class="form-group row">
                         <label for="nombre" class="control-label col-sm-6">Nombre de producto</label>
                         <div class="col-6">
-                            <input class="form-control" id="nombre" type="text" name="nombre" placeholder="MIXTO" pattern="[A-Za-z]{1,20}" style="text-transform:uppercase;" required>
+                            <input class="form-control" id="nombre" type="text" name="nombre" placeholder="MIXTO" pattern="[A-Z a-z]{1,20}" style="text-transform:uppercase;" required>
                         </div>
                     </div>
                     <div class="form-group row">

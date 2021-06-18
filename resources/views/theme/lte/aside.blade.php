@@ -33,7 +33,9 @@
         </li>
         <li class="nav-item">
           <a href="/personal" class="nav-link">
-            <i class="nav-icon fas fa-user"></i>
+            <i class="nav-icon fas fa-id-card">
+              {{--  fa-user  --}}
+            </i>
             <p>
               Personal
             </p>
@@ -47,11 +49,19 @@
             </p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="/productos" class="nav-link">
+            <i class="fas fa-barcode nav-icon"></i>
+            <p>
+              Productos
+            </p>
+          </a>
+        </li>
         
         {{--  <li class="nav-header">FACTURACION</li>  --}}
         <li class="nav-item">
           <a href="" class="nav-link menu-is-opening menu-open">
-            <i class="nav-icon fas fa-edit"></i>
+            <i class="nav-icon fas fa-cash-register"></i>
             <p>
               Facturación
               {{--  <i class="fas fa-angle-left right"></i>  --}}
@@ -60,7 +70,7 @@
           <ul class="nav nav-treeview" style="display: block;">
             <li class="nav-item">
               <a href="/factura_venta" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-edit nav-icon"></i>
                 <p>Facturas de Venta</p>
               </a>
             </li>
@@ -78,7 +88,7 @@
             </li>
             <li class="nav-item">
               <a href="/productos" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-barcode nav-icon"></i>
                 <p>Productos</p>
               </a>
             </li>
@@ -86,7 +96,9 @@
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-table"></i>
+            <i class="nav-icon fas fa-file-contract">
+              {{--  fa-table  --}}
+            </i>
             <p>
               RRHH
               <i class="fas fa-angle-left right"></i>
@@ -117,7 +129,8 @@
         {{--  <li class="nav-header">TESORERIA</li>  --}}
         <li class="nav-item">
           <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-file"></i>
+            <i class="nav-icon fas fa-coins "></i>
+            {{--  fa-file  --}}
             <p>Tesoreria</p>
           </a>
         </li>

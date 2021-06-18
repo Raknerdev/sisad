@@ -19,9 +19,9 @@ class CreateProductsTable extends Migration
             $table->integer('id_producto');
             $table->string('codigo');
             $table->string('name');
-            $table->float('precio_vip');
-            $table->float('precio_m');
-            $table->float('precio_d');
+            $table->float('VIP');
+            $table->float('Mayorista');
+            $table->float('Minorista');
             $table->timestamps();
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_spanish_ci';

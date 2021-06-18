@@ -55,18 +55,32 @@
         <tr class="text-center">
             <th>Ítem</th>
             <th>Código</th>
-            <th colspan="3">Producto</th>
+            <th colspan="2">Producto</th>
             <th>Cantidad</th>
             <th>Precio Unitario</th>
+            <th>Total</th>
         </tr>
         {{--  Agregar Productos  --}}
-        <tr class="text-center">
-            <th>1</th>
-            <th>P003-MIX</th>
-            <th colspan="3">Mixto</th>
-            <th>90kg</th>
-            <th>0,80</th>
+        @php
+            $cont = 0;
+            $tipo = $compra->tipo_cliente;
+        @endphp
+        
+        @foreach ($producto as $prod)
+            <tr class="text-center">
+            <th>
+                {{
+                    $cont=$cont+1
+                }}
+            </th>
+            <th>{{$prod->codigo}}</th>
+            <th colspan="2">{{$prod->name}}</th>
+            <th>{{$compra->total_peso_prod}} kg</th>
+            <th>{{$prod->$tipo}}$</th>
+            <th>0$</th>
         </tr>
+        @endforeach
+        
         {{--  Fin Lista de Productos  --}}
         <tr class="text-center">
             <th colspan="5">Total Cantidad de Producto</th>

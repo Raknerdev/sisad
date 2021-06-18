@@ -5,6 +5,7 @@ namespace App\Http\Controllers\facturacion;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\admin\Permiso;
+use App\Models\admin\Productos;
 use App\Models\facturacion\Reportes;
 use App\Models\facturacion\FacVenta;
 use App\Models\facturacion\FacCompra;
@@ -65,7 +66,13 @@ class FacturacionController extends Controller
     public function showCompra($id)
     {
         $compra = FacCompra::find($id);
-        return view('facturacion.fcompra', compact('compra'));
+        $id_prod = json_decode($compra->productos);
+        $tipo = $compra->tipo_cliente;
+
+        foreach ($id_prod as $prod) {
+            $producto[] = Productos::find($prod);
+        }
+        return view('facturacion.fcompra', compact('compra', 'producto'));
     }
     public function destroyCompra($id)
     {

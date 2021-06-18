@@ -2,6 +2,10 @@
 @section('titulo')
     Factura de Compra
 @endsection
+@section('styles')
+<link rel="stylesheet" href="{{asset("assets/lte/plugins/select2/css/select2.min.css")}}">
+<link rel="stylesheet" href="{{asset("assets/lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css")}}">
+@endsection
 @section('contenido')
 {{--  Modal Agregar Factura --}}
 <div class="modal fade" id="creacion" tabindex="-1" role="dialog" aria-labelledby="creacionLabel">
@@ -17,21 +21,21 @@
                     <div class="form-group row">
                         <label for="cliente" class="control-label col-sm-6">Nombre de CLiente</label>
                         <div class="col-6">
-                            <select class="form-control" name="cliente" id="cliente">
+                            <select class="form-control" name="cliente" id="cliente" required>
                             </select>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="producto" class="control-label col-sm-6">Producto</label>
                         <div class="col-6">
-                            <select class="form-control" name="producto">
-                                <option value="Efectivo">Producto</option>
-                                <option value="Transferencia">Producto</option>
-                                <option value="Otro">Producto</option>
-                              </select>
+                            <div class="select2-purple">
+                                <select class="select2" multiple="multiple" name="producto[]" id="producto" data-placeholder="Seleccione Producto" data-dropdown-css-class="select2-purple" style="width: 100%;" required>
+                                </select>
+                              </div>
                         </div>
                     </div>
-
+                    <div class="row" id="canciones">
+                    </div>
                     <div class="form-group modal-footer d-inline">
                         <button type="submit" class="btn btn-primary float-left ml-5" id="btn-nuevo">
                             Generar
@@ -48,6 +52,7 @@
                         </div>
                     </div>  
                     --}}
+                    <!-- El id="canciones" indica que la función de JavaScript dejará aquí el resultado -->
                 </form>
               <br><br>
               {{$success = Session::get('success')}}
@@ -88,9 +93,12 @@
                       </tr>
                 </thead>
                 <tbody class="text-center">
+                    @php
+                        $cont = 0;
+                    @endphp
                   @foreach ($facturas as $factura)
                   <tr>
-                      <th>{{$factura->id}}</th>
+                      <th>{{$cont=$cont+1}}</th>
                       <th>{{$factura->created_at}}</th>
                       <th>{{$factura->nro_ctrl_factura}}</th>
                       <th>{{$factura->nombre_c}}</th>
@@ -105,6 +113,7 @@
                       </th>
                   </tr>
                   @endforeach
+                  
                 </tbody>
                 
               </table>
@@ -116,11 +125,14 @@
 </div>
 @endsection
 @section('scripts')
+<script src="{{asset("assets/lte/plugins/select2/js/select2.full.min.js")}}"></script>
 <script>
     $(function() {
+        $('.select2').select2()
         $('#btn-creacion').on('click', function () {
             event.preventDefault();
             var url =  "{{ url('/list_clientes')}}";
+            var urlProd =  "{{ url('/list_prodcts')}}";
             // console.log(url);
             $.get(url, function(data, status)
             {
@@ -129,6 +141,19 @@
               $.each(data, function(key,value) {
                 $el.append($("<option></option>")
                    .attr("value", key+1).text(value.nombre));
+              });
+               console.log(data);
+            }).fail(function()
+            {
+               console.log("Error");
+            });
+            $.get(urlProd, function(data, status)
+            {
+              var $el = $("#producto");
+              $el.empty();
+              $.each(data, function(key,value) {
+                $el.append($("<option></option>")
+                   .attr("value", key+1).text(value.name));
               });
                console.log(data);
             }).fail(function()

@@ -27,7 +27,7 @@ class CreateCompraTable extends Migration
             $table->string('telefono')->nullable();
             $table->string('direccion_c')->nullable();
             // Relacion Productos aqui
-
+            $table->string('productos')->nullable();
             // Seguimos con la factura
             $table->float('total_peso_prod');
             $table->float('sub_total');

@@ -34,6 +34,7 @@ Route::get('/nota_destroy/{id}', 'App\Http\Controllers\facturacion\FacturacionCo
 
 // Scripts Route
 Route::get('/list_clientes', 'App\Http\Controllers\admin\AdminController@listClients');
+Route::get('/list_prodcts', 'App\Http\Controllers\admin\AdminController@listProducts');
 
 // Rutas POST
 Route::post('/agregar_producto','App\Http\Controllers\admin\AdminController@aggProducto');
