@@ -95,9 +95,9 @@
                     <tr>
                         <th>{{$product->codigo}}</th>
                         <th>{{$product->name}}</th>
-                        <th>{{$product->precio_vip}}$</th>
-                        <th>{{$product->precio_m}}$</th>
-                        <th>{{$product->precio_d}}$</th>
+                        <th>{{$product->VIP}}$</th>
+                        <th>{{$product->Mayorista}}$</th>
+                        <th>{{$product->Minorista}}$</th>
                         <th class="text-center">
                             <div class="btn-group btn-group-sm bg-dark">
                                 <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>

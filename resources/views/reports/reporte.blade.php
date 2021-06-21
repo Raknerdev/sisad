@@ -14,46 +14,67 @@
                     <tr>
                         <th>Item</th>
                         <th>Fecha</th>
+                        <th>Nro. Factura</th>
                         <th>Nombre de Cliente</th>
                         <th>Monto</th>
                         <th>Abono</th>
                         <th>Resta</th>
                         <th>Descontado por Deuda</th>
-                        <th>Obervacion</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody class="text-center">
+                    @php
+                        $total_monto = 0;
+                        $total_abono = 0;
+                        $total_resta = 0;
+                        $total_descuento = 0;
+                        $item = 0;
+                    @endphp
                     @foreach ($reportes as $reporte)
+                    @if ($reporte->estado != 'Anulada')
                     <tr>
-                        <th>{{$reporte->id}}</th>
-                        <th>{{$reporte->fecha}}</th>
-                        <th>{{$reporte->nombre}}$</th>
-                        <th>{{$reporte->monto}}$</th>
-                        <th>{{$reporte->abono}}$</th>
-                        <th>{{$reporte->resta}}$</th>
-                        <th>{{$reporte->descuento}}$</th>
-                        <th>{{$reporte->observacion}}$</th>
-                        <th>
-                            <div class="btn-group btn-group-sm bg-white">
-                                <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                <a href="#" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                        <td>{{$item = $item+1}}</td>
+                        <td>{{$reporte->fecha_emision}}</td>
+                        <td>{{$reporte->ctrl_factura}}</td>
+                        <td>{{$reporte->nombre_c}}</td>
+                        <td>{{$reporte->total}}$</td>
+                        <td>{{$reporte->abono}}$</td>
+                        <td>{{$resta = $reporte->resta - $reporte->abono}}$</td>
+                        <td>{{$reporte->descuento}}$</td>
+                        <td>{{$reporte->estado}}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="/view_nota/{{encrypt("$reporte->id")}}" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                <a href="/edit_nota/{{encrypt("$reporte->id")}}" class="btn btn-dark"><i class="fas fa-edit"></i></a>
+                                @auth
                                 <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                @endauth
                             </div>
-                        </th>
+                        </td>
                     </tr>
+                    @php
+                        $total_monto = $total_monto + $reporte->total;
+                        $total_abono = $total_abono + $reporte->abono;
+                        $total_resta = $total_resta + $resta;
+                        $total_descuento = $total_descuento + $reporte->descuento;
+                    @endphp
+                    @endif
                     @endforeach
+                    
                 </tbody>
-                <tfoot class="text-center">
+                <tfoot class="text-center bg-lightblue">
                     <tr>
+                        <th colspan="3"></th>
+                        <th>Total</th>
+                        <th>{{$total_monto}}$</th>
+                        <th>{{$total_abono}}$</th>
+                        <th>{{$total_resta}}$</th>
+                        <th>{{$total_descuento}}$</th>
                         <th colspan="2"></th>
-                        <th>Totales</th>
-                        <th>{{$totalMonto}}</th>
-                        <th>{{$totalAbono}}</th>
-                        <th>{{$totalResta}}</th>
-                        <th>{{$totalDescontado}}</th>
-                        <th></th>
                     </tr>
-                </tfoot>            
+                </tfoot>         
               </table>
             </div>
             <!-- /.card-body -->
@@ -80,7 +101,7 @@
     $(function () {
         $("#productos").DataTable({
             "responsive": true,
-            "searching": false,
+            "searching": true,
             "lengthChange": false,
             "autoWidth": false,
             {{--  "buttons": ["excel", "pdf", "print"]  --}}

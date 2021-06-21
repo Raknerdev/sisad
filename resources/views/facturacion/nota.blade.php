@@ -2,82 +2,214 @@
 @section('titulo')
     Nota de entrega
 @endsection
+@section('styles')
+<link rel="stylesheet" href="{{asset("assets/lte/plugins/select2/css/select2.min.css")}}">
+<link rel="stylesheet" href="{{asset("assets/lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css")}}">
+
+<script language="JavaScript">
+    
+    function aggProd() {
+        var p = document.querySelector(".produ");
+        var p_prime = p.cloneNode(true);
+        document.getElementById('productos').appendChild(p_prime);
+    }
+    
+</script>
+@endsection
 @section('contenido')
+{{--  Modal Agregar Factura --}}
+<div class="modal fade" id="creacion" tabindex="-1" role="dialog" aria-labelledby="creacionLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header row d-inline">
+                <button type="button" class="close mr-1" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center ml-4">Crear Nueva Nota</h4>
+            </div>
+            <div class="modal-body text-center">
+                <form class="form-horizontal" role="form" method="POST" action="/agregar_nota" enctype="multipart/form-data"  id="form-nuevo">
+                    @csrf
+                    <div class="form-group row">
+                        <label for="fecha" class="control-label col-sm-6">Fecha de Emisión</label>
+                        <input class="form-control col-6" name="fecha" type="date" min="<?php echo date("Y-m-d");?>" value="<?php echo date("Y-m-d");?>" required>
+                    </div>
+                    <div class="form-group row">
+                        <label for="patio" class="control-label col-sm-6">Patio</label>
+                        <select class="form-control col-sm-6" name="patio" required>
+                            <option value="0" selected disabled>Selecct</option>
+                            <option value="1">Patio I</option>
+                            <option value="2">Patio II</option>
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <label for="cliente" class="control-label col-sm-6">Nombre de CLiente</label>
+                        <select class="form-control col-sm-6" name="cliente" id="cliente" required>
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <label for="forma_pago" class="control-label col-sm-6">Forma de Pago</label>
+                        <select class="form-control col-sm-6" name="forma_pago">
+                            <option value="0" selected disabled>Selecct...</option>
+                            <option value="Efectivo">Efectivo</option>
+                            <option value="Transferencia">Transferencia</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <label for="abono" class="control-label col-sm-6">Abono</label>
+                        <input type="number" class="form-control col-sm-6" name="abono" placeholder="10.5" min="1" step="0.01">
+                    </div>
+                    <div class="form-group row">
+                        <label for="obs" class="control-label col-sm-6">Observación</label>
+                        <input type="text" class="form-control col-sm-6" name="obs" placeholder="Comentario." pattern="[A-Z a-z.]">
+                    </div>
+                    <div class="form-group">
+                        <input type="button" class="btn btn-primary col-12" onclick="aggProd();" value="Agregar Producto" />
+                    </div>
+                    <div class="form-group" id="productos">
+                        <div class="produ mb-3 text-left">
+                            <div class="row">
+                                <div id="product" class="col-sm-6">
+                                    <label for="producto" class="control-label">Producto</label>
+                                    <select class="form-control" name="producto[]" id="producto" required>
+                                    </select>
+                                </div>
+                                <div id="pes" class="col-sm-6">
+                                    <label for="peso" class="control-label">peso</label>
+                                    <div class="">
+                                        <input class="form-control" type="number" name="peso[]" id="peso" placeholder="15.3" min="1" step="0.01" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group modal-footer d-inline">
+                        <button type="submit" class="btn btn-primary float-left ml-5" id="btn-nuevo">
+                            Generar
+                        </button>
+                        <button type="button" class="btn btn-danger float-right mr-5" data-dismiss="modal">
+                            Cancelar
+                        </button>
+                    </div>
+                    {{--  Cargar Archivo
+                    <div class="form-group">
+                        <label for="c_documento" class="col-md-4 control-label">Archivo</label>
+                        <div class="col-md-6">
+                            <input type="file" required name="archivo" id="archivo" name="archivo"/>
+                        </div>
+                    </div>  
+                    --}}
+                    <!-- El id="canciones" indica que la función de JavaScript dejará aquí el resultado -->
+                </form>
+              <br><br>
+              {{$success = Session::get('success')}}
+              @if ($success)
+                  <div class="alert alert-success">
+                      <strong>!!Felicidades!!</strong>Se Creo el usuario Correctamente <br><br>
+                  </div>
+              @endif
+            </div>
+        </div>
+    </div>
+</div>
+{{--  Fin Modal Agregar Factura  --}}
 
-<a href="crear_nota_entrega" class="btn btn-primary shadow mb-3 float-right">
-    <span class="text-white">
-        Crear Nueva Nota
-    </span>
-</a>
-<small>
-    <table class="bg-white table table-bordered text-black">
-        <tr>
-            <th colspan="7">
-                <img src="{{asset("assets/img/header.jpeg")}}" style="width: 40%;" alt="Consorcio Express">
-            </th>
-        </tr>
-        <tr class="text-center" style="background: #28a745; color: black">
-            <th colspan="7"style="height: 1cm">
-                Control de Pago de Factura
-            </th>
-        </tr>
-        <tr>
-            <th rowspan="6" style="width: 15%;"></th>
-            <th colspan="1">Fecha: </th>
-            <th colspan="1">08-02-54</th>
-            <th colspan="1">Nro. Control de Patio</th>
-            <th colspan="1">00041</th>
-            <th colspan="1">Nro. Control de Factura</th>
-            <th colspan="1">051515</th>
-        </tr>
-        <tr>
-            <th colspan="2">Codigo del Cliente:</th>
-            <th colspan="5">CODC-0241</th>
-        </tr>
-        <tr class="border">
-            <th colspan="2">Nombre o Razon Social:</th>
-            <th colspan="5">Fernando Miranda</th>
-        </tr>
-        <tr class="border">
-            <th colspan="2">Cédula o Rif:</th>
-            <th colspan="5">21493193</th>
-        </tr>
-        <tr class="border">
-            <th colspan="2">Teléfono:</th>
-            <th colspan="5">04123759129</th>
-        </tr>
-        <tr class="border">
-            <th colspan="2">Domicilio Fiscal:</th>
-            <th colspan="5">La Hoyada</th>
-        </tr>
-        <tr class="text-center" style="background: #28a745; color: black">
-            <th colspan="7">
-                Condiciones de Pago
-            </th>
-        </tr>
-        <tr class="text-center">
-            <th>Total a Pagar</th>
-            <th>Fecha</th>
-            <th>Forma de Pago</th>
-            <th>Ref.</th>
-            <th>Abona</th>
-            <th>Debe</th>
-            <th>Resta</th>
-        </tr>
-        <tr class="text-center">
-            <th>83,56</th>
-            <th>21-05-21</th>
-            <th>Efectivo</th>
-            <th>N/P</th>
-            <th>83,56</th>
-            <th>0,00</th>
-            <th>0,00</th>
-        </tr>
-        <tr>
-            <th colspan="4" class="text-center align-bottom">Recibo Conforme</th>
-            <th colspan="3">Disculpe por la demora, trabajamos para su satisfacción.</th>
-        </tr>
-    </table>
-</small>
-
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3  class="d-inline">Notas de Entrega</h3>
+                <button class="d-inline btn btn-info shadow float-right" id="btn-creacion" 
+                data-toggle="modal" data-target="#creacion" name="Agregar Producto">
+                    Nueva Nota 
+                </button>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="productos" class="table table-bordered table-striped">
+                <thead class="text-center">
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha de Emsión</th>
+                        <th>Nro. Factura</th>
+                        <th>Cliente</th>
+                        <th>Total</th>
+                        <th>Esatado</th>
+                        <th>Acción</th>
+                      </tr>
+                </thead>
+                <tbody class="text-center">
+                    @php
+                        $cont = 0;
+                    @endphp
+                  @foreach ($notas as $nota)
+                  <tr>
+                      <th>{{$cont=$cont+1}}</th>
+                      <th>{{$nota->fecha_emision}}</th>
+                      <th>{{$nota->ctrl_factura}}</th>
+                      <th>{{$nota->nombre_c}}</th>
+                      <th>{{$nota->total}}</th>
+                      <th>{{$nota->estado}}</th>
+                      <th>
+                        <div class="btn-group btn-group-sm">
+                          <a href="/view_nota/{{encrypt("$nota->id")}}" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                          <a href="/edit_nota/{{encrypt("$nota->id")}}" class="btn btn-dark"><i class="fas fa-edit"></i></a>
+                          @auth
+                          <a href="/nota_destroy/{{encrypt("$nota->id")}}" class="btn btn-danger"><i class="fas fa-trash"></i></a>    
+                          @endauth
+                        </div>
+                      </th>
+                  </tr>
+                  @endforeach
+                  
+                </tbody>
+                
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+      </div>
+    </div>
+</div>
+@endsection
+@section('scripts')
+<script src="{{asset("assets/lte/plugins/select2/js/select2.full.min.js")}}"></script>
+<script>
+    $(function() {
+        $('.select2').select2()
+        $('#btn-creacion').on('click', function () {
+            event.preventDefault();
+            var url =  "{{ url('/list_clientes')}}";
+            var urlProd =  "{{ url('/list_prodcts')}}";
+            // console.log(url);
+            $.get(url, function(data, status)
+            {
+              var $el = $("#cliente");
+              $el.empty();
+              $.each(data, function(key,value) {
+                $el.append($("<option></option>")
+                   .attr("value", key+1).text(value.nombre));
+              });
+               console.log(data);
+            }).fail(function()
+            {
+               console.log("Error");
+            });
+            $.get(urlProd, function(data, status)
+            {
+              var $el = $("#producto");
+              $el.empty();
+              $.each(data, function(key,value) {
+                $el.append($("<option></option>")
+                   .attr("value", key+1).text(value.name));
+              });
+               console.log(data);
+            }).fail(function()
+            {
+               console.log("Error");
+            });
+          });
+        }
+    );
+</script>
 @endsection

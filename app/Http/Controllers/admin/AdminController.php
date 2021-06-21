@@ -7,13 +7,19 @@ use Illuminate\Http\Request;
 use App\Models\admin\Productos;
 use App\Models\admin\Clientes;
 use App\Models\admin\Permiso;
+use App\Models\facturacion\Control;
 use App\Models\facturacion\FacVenta;
 use App\Models\facturacion\FacCompra;
 use App\Models\facturacion\NotaEntega;
+use App\Models\facturacion\Seguimiento;
 use App\Models\User;
 
 class AdminController extends Controller
 {
+    public function index()
+    {
+        return view('inicio');
+    }
     public function listClients(){
         $clientes = Clientes::get();
         return $clientes;
@@ -21,8 +27,9 @@ class AdminController extends Controller
 
     public function clientes()
     {
+        $seguimientos = Seguimiento::orderBy('id')->get();
         $clientes = Clientes::orderBy('id')->get();
-        return view('admin.clientes', compact('clientes'));
+        return view('admin.clientes', compact('clientes', 'seguimientos'));
     }
 
     public function aggCliente(Request $request)
@@ -43,6 +50,7 @@ class AdminController extends Controller
         $cliente-> direccion = $request->direccion;
         $cliente-> telefono = $request->telefono;
         $cliente-> tipo = $request->tipo;
+        $cliente->facturas = 0;
         $cliente-> save();
 
         return back();
@@ -57,7 +65,6 @@ class AdminController extends Controller
         $products = Productos::orderBy('id')->get();
         return view('admin.productos', compact('products'));
     }
-
     public function aggProducto(Request $request)
     {
         // Para hacer que los productos se cuenten 
@@ -79,13 +86,6 @@ class AdminController extends Controller
 
         return back();
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function personal()
     {
         $users = Permiso::orderBy('id')->get();
@@ -196,69 +196,149 @@ class AdminController extends Controller
     }
     public function aggNota(Request $request)
     {
-        // Para hacer que los productos se cuenten 
-        // $c= Clientes::orderBy('nro_cliente', 'desc')->first();
-        // if ($c){
-        // $id = $c->nro_cliente + 1;
-        // }else{
-        // $id = 1;
-        // }
+        $cliente = Clientes::find($request->cliente);
+        $cf = Control::orderBy('nro_factura', 'desc')->first();
+        if ($cf) {
+            $factura = $cf->nro_factura;
+        }else{
+            $factura = 0;
+        }
+        $control = Control::orderBy('nro_factura_nota', 'desc')->first();
+        if ($control) {
+            $nro_ctrlf = $control-> nro_factura_nota + 1;
+        }else{
+            $nro_ctrlf = 1;
+        }
+        $cpi = Control::orderBy('nro_patio_i', 'desc')->first();
+        $cpii = Control::orderBy('nro_patio_ii', 'desc')->first();
+        
+        $nota = new NotaEntega();
+        if ($request->patio == 1) {
+            if ($cpi) {
+                $nro_ctrlpi = $cpi-> nro_patio_i + 1;
+            }else{
+                $nro_ctrlpi = 1;
+            }
+            $nota->ctrl_patio = 'CPTI-' . str_pad($nro_ctrlpi, 5, '0', STR_PAD_LEFT);
+        }elseif($request->patio == 2){
+            if ($cpii) {
+                $nro_ctrlpii = $cpii-> nro_patio_ii + 1;
+            }else{
+                $nro_ctrlpii = 0;
+            }
+            $nota->ctrl_patio = 'CPTII-' . str_pad($nro_ctrlpii, 5, '0', STR_PAD_LEFT);
+        }
+        $prod = $request->producto;
+        $pesos = $request->peso;
+        $tipo = $cliente->tipo;
+        foreach ($prod as $prodts) {
+            $productos[] = Productos::find($prodts);
+        }
+        $costo = 0;
+        for ($i=0; $i < count($pesos); $i++) { 
+            $pund = $productos[$i]->$tipo;
+            $cost = $pesos[$i] * $pund;
+            $costo = $costo + $cost;
+        }
+        // var_dump($costo);
+        
+        $nota-> fecha_emision = $request->fecha;
+        $nota-> ctrl_factura = 'FCE-' . str_pad($nro_ctrlf, 5, '0', STR_PAD_LEFT);
+        $nota-> id_cliente = $cliente->id;
+        $nota-> cod_cliente = $cliente->codigo;
+        $nota-> nombre_c = $cliente->nombre;
+        $nota-> cedula_c = $cliente->cedula;
+        $nota-> telefono = $cliente->telefono;
+        $nota-> direccion_c = $cliente->direccion;
+        $nota-> cliente = $cliente->tipo;
 
-        // $cliente = new Clientes();
-        // $cliente->nro_cliente = $id;
-        // $cliente->codigo = 'CLT' . str_pad($id, 3, '0', STR_PAD_LEFT);
-        // $cliente-> nombre = $request->nombre;
-        // $cliente-> cedula = $request->cedula;
-        // $cliente-> direccion = $request->direccion;
-        // $cliente-> telefono = $request->telefono;
-        // $cliente-> tipo = $request->tipo;
-        // $cliente-> save();
+        $nota-> productos = json_encode($productos);
+        $nota-> pesos = json_encode($request->peso);
+
+        $nota-> total = $costo;
+        $nota-> fecha_pago = $request->fecha;
+        if ($request->forma_pago) {
+            $nota-> forma_pago = $request->forma_pago;
+        }else{
+            $nota-> forma_pago = 'Otro';
+        }
+        if ($request->abono) {
+            $nota-> abono = $request->abono;
+            $nota-> resta = $costo - $request->abono;
+        }else{
+            $nota-> abono = 0;
+            $nota-> resta = $costo;
+        }
+        if ($request->obs) {
+            $nota-> observacion = $request->obs;
+        }else{
+            $nota-> observacion = 'N/P';
+        }
+        $nota-> ref = 'N/P';
+        $nota-> debe = $costo;        
+        $nota-> descuento = 0;
+        $nota-> estado = 'Pendiente';
+        $nota-> save();
+
+        $client = Clientes::find($cliente->id);
+        if ($client->facturas == 0) {
+            $client->facturas = 1;
+        }else{
+            $client->facturas = $client->facturas + 1;
+        }
+        $client->save();
+        
+
+        $control_c = Control::find(1);
+        if ($control_c) {
+            if ($request->patio == 1) {
+                $control_c-> nro_patio_i = $nro_ctrlpi;
+                $control_c-> nro_patio_ii = $cpi-> nro_patio_ii;
+            }else{
+                $control_c-> nro_patio_ii = $nro_ctrlpii;
+                $control_c-> nro_patio_i = $cpi-> nro_patio_i;
+            }
+            $control_c-> nro_factura_nota = $nro_ctrlf;
+            $control_c-> save();
+        }else{
+            $c = new Control();
+            $c-> nro_factura = $factura;
+            if ($request->patio == 1) {
+                $c-> nro_patio_i = $nro_ctrlpi;
+                if ($cpi) {
+                    $c-> nro_patio_ii = $cpi-> nro_patio_ii;
+                }else{
+                    $c-> nro_patio_ii = 0;
+                }
+                
+            }else{
+                $c-> nro_patio_ii = $nro_ctrlpii;
+                if ($cpi) {
+                    $c-> nro_patio_i = $cpi-> nro_patio_i;
+                }else{
+                    $c-> nro_patio_i = 0;
+                }
+                
+            }
+            $c-> nro_factura_nota = $nro_ctrlf;
+            $c-> save();
+        }
+
+        $id_nota = NotaEntega::orderBy('id', 'desc')->first();
+        $seguimiento = new Seguimiento();
+        $seguimiento-> id_cliente = $cliente->id;
+        $seguimiento-> id_factura = $id_nota->id;
+        
+        $seguimiento-> total = $costo;
+        $seguimiento-> fecha_pago = $request->fecha;
+        $seguimiento-> forma_pago = $request->forma_pago;
+        $seguimiento-> ref = 'N/P';
+        $seguimiento-> abono = 0;
+        $seguimiento-> debe = $costo;
+        $seguimiento-> resta = $costo;
+        $seguimiento-> descuento = 0;
+        $seguimiento->save();
 
         return back();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

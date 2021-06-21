@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 // Rutas Principales
-Route::get('/', 'App\Http\Controllers\InicioController@index');
+Route::get('/', 'App\Http\Controllers\admin\AdminController@index');
 Route::get('/login', 'App\Http\Controllers\admin\PermisoController@index');
 // Rutas Vista Aside
 Route::get('/personal', 'App\Http\Controllers\admin\AdminController@personal');
@@ -23,10 +23,17 @@ Route::get('/reporte', 'App\Http\Controllers\facturacion\FacturacionController@r
     // Facturacion
 Route::get('/factura_compra', 'App\Http\Controllers\facturacion\FacturacionController@compra');
 Route::get('/factura_venta', 'App\Http\Controllers\facturacion\FacturacionController@venta');
-        // View item
+Route::get('/nota_entrega', 'App\Http\Controllers\facturacion\FacturacionController@nota');
+        // View Item
 Route::get('/view_compra/{id}', 'App\Http\Controllers\facturacion\FacturacionController@showCompra');
 Route::get('/view_venta/{id}', 'App\Http\Controllers\facturacion\FacturacionController@showVenta');
 Route::get('/view_nota/{id}', 'App\Http\Controllers\facturacion\FacturacionController@showNota');
+        // Edit Item
+Route::get('/edit_compra/{id}', 'App\Http\Controllers\facturacion\FacturacionController@editCompra');
+Route::get('/edit_venta/{id}', 'App\Http\Controllers\facturacion\FacturacionController@editVenta');
+Route::get('/edit_nota/{id}', 'App\Http\Controllers\facturacion\FacturacionController@editNota');
+        // Edit Item Post
+Route::post('/update_nota/{id}', 'App\Http\Controllers\facturacion\FacturacionController@updateNota');
         // Destroy
 Route::get('/compra_destroy/{id}', 'App\Http\Controllers\facturacion\FacturacionController@destroyCompra');
 Route::get('/venta_destroy/{id}', 'App\Http\Controllers\facturacion\FacturacionController@destroyVenta');

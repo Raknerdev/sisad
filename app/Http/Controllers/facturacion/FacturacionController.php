@@ -6,40 +6,24 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\admin\Permiso;
 use App\Models\admin\Productos;
+use App\Models\facturacion\Control;
 use App\Models\facturacion\Reportes;
 use App\Models\facturacion\FacVenta;
 use App\Models\facturacion\FacCompra;
-use App\Models\facturacion\NotaEntrega;
+use App\Models\facturacion\NotaEntega;
+use App\Models\facturacion\Seguimiento;
 use App\Models\User;
 
 class FacturacionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
     public function reporte()
     {
         $totalMonto = 0;
         $totalAbono = 0;
         $totalResta = 0;
         $totalDescontado = 0;
-        $reportes = Reportes::orderBy('id')->get();
-        foreach ($reportes as $reporte) {
-            $total = $total + $reporte->id;
-        }
-        if ($reportes) {
-            return view('reports.reporte', compact('reportes',
-            'totalMonto','totalAbono','totalResta','totalDescontado'));
-        }else{
-            return view('reports.reporte', compact(
-            'totalMonto','totalAbono','totalResta','totalDescontado'));
-        }
+        $reportes = NotaEntega::orderBy('id')->get();
+        return view('reports.reporte', compact('reportes'));
     }
     public function venta()
     {   
@@ -48,12 +32,14 @@ class FacturacionController extends Controller
     }
     public function showVenta($id)
     {
-        $venta = FacVenta::find($id);
+        $id_venta = decrypt($id);
+        $venta = FacVenta::find($id_venta);
         return view('facturacion.fventa', compact('venta'));
     }
     public function destroyVenta($id)
     {
-        $venta = FacVenta::find($id);
+        $id_venta = decrypt($id);
+        $venta = FacVenta::find($id_venta);
         $venta->delete();
         return back();
     }
@@ -65,7 +51,8 @@ class FacturacionController extends Controller
     }
     public function showCompra($id)
     {
-        $compra = FacCompra::find($id);
+        $id_compra = decrypt($id);
+        $compra = FacCompra::find($id_compra);
         $id_prod = json_decode($compra->productos);
         $tipo = $compra->tipo_cliente;
 
@@ -76,68 +63,36 @@ class FacturacionController extends Controller
     }
     public function destroyCompra($id)
     {
-        $compra = FacCompra::find($id);
+        $id_compra = decrypt($id);
+        $compra = FacCompra::find($id_compra);
         $compra->delete();
         return back();
     }
 
     public function nota()
     {   
-        $notas = NotaEntrega::orderBy('id')->get();
+        $notas = NotaEntega::orderBy('id')->get();
         return view('facturacion.nota', compact('notas'));
     }
     public function showNota($id)
     {
-        $nota = NotaEntrega::find($id);
+        $id_nota = decrypt($id);
+        $nota = NotaEntega::find($id_nota);
         return view('facturacion.fnota', compact('nota'));
     }
     public function destroyNota($id)
     {
-        $nota = FacCompra::find($id);
+        $id_nota = decrypt($id);
+        $nota = NotaEntega::find($id_nota);
         $nota->delete();
         return back();
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+    public function editNota($id)
+    {   
+        $id_nota = decrypt($id);
+        $nota = NotaEntega::find($id_nota);
+        $seguimientos = Seguimiento::orderBy('id')->get();
+        return view('facturacion.editNota', compact('nota', 'seguimientos'));
     }
 
     /**
@@ -147,19 +102,61 @@ class FacturacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateNota(Request $request, $id)
     {
-        //
+        $nota = NotaEntega::find($id);
+        $nota-> fecha_pago = $request->fecha;
+        if ($request->f_pago) {
+            $nota-> forma_pago = $request->f_pago;
+        }
+        if ($request->referencia) {
+            $nota-> ref = $request->referencia;
+        }
+        if ($request->estado) {
+            $nota-> estado = $request->estado;
+        }
+        if ($request->abono) {
+            $nota-> debe = $nota->resta;
+            $nota-> abono = $request->abono;
+            $nota-> resta = $nota->debe - $request->abono;
+        }
+        if ($request->obs) {
+            $nota-> observacion = $request->obs;
+        }else{
+            $nota-> observacion = 'N/P';
+        }
+        // $nota->total = $nota->total;
+        $nota->save();
+
+        $nota_a = NotaEntega::find($id);
+        $seguimiento = new Seguimiento();
+
+        $seguimiento-> id_cliente = $nota_a->id_cliente;
+        $seguimiento-> id_factura = $id;
+        $seguimiento-> total = $nota_a->total;
+        $seguimiento-> fecha_pago = $request->fecha;
+        $seguimiento-> debe = $nota_a->debe;
+
+
+        if ($request->f_pago) {
+            $seguimiento-> forma_pago = $request->f_pago;
+        }else{
+            $seguimiento-> forma_pago = $nota_a->forma_pago;
+        }
+
+        if ($request->referencia) {
+            $seguimiento-> ref = $request->referencia;
+        }
+
+        if ($request->abono) {
+            $seguimiento-> abono = $nota_a->abono;
+            $seguimiento-> resta = $nota_a->debe - $nota_a->abono;
+        }
+        // $seguimiento-> descuento = $request->
+        $seguimiento->save();
+
+        
+        return back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

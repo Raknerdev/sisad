@@ -23,6 +23,7 @@ class CreateClientesTable extends Migration
             $table->string("cedula");
             $table->string("telefono");
             $table->enum('tipo', ['Minorista', 'Mayorista', 'VIP']);
+            $table->integer('facturas');
             $table->timestamps();
         });
     }

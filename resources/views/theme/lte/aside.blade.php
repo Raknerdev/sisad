@@ -8,9 +8,9 @@
   <div class="sidebar">
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-      {{--  <div class="image">
-        <img src="{{ asset("assets/$theme/dist/img/user2-160x160.jpg") }}" class="img-circle elevation-2" alt="User Image">
-      </div>  --}}
+      <div class="image">
+        <img src="{{ asset("favicon.png") }}" class="img-circle elevation-2" alt="User Image">
+      </div>
       <div class="info text-center m-auto">
         <h5 class="text-white-50">Pedro Alvarez</h5>
         {{--  <a href="" class="d-block">Pedro Alvarez</a>  --}}
@@ -81,7 +81,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="/nota" class="nav-link">
+              <a href="/nota_entrega" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Notas de Entega</p>
               </a>

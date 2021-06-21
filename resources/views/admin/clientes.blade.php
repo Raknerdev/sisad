@@ -102,19 +102,31 @@
                 </thead>
                 <tbody class="text-center">
                     @foreach ($clientes as $cliente)
+                    @php
+                        $total = 0;
+                    @endphp
                     <tr>
-                        <th>{{$cliente->codigo}}</th>
-                        <th>{{$cliente->nombre}}</th>
-                        <th>{{$cliente->tipo}}</th>
-                        <th>0</th>
-                        <th>0$</th>
-                        <th class="text-center">
-                            <div class="btn-group btn-group-sm bg-dark">
+                        <td>{{$cliente->codigo}}</td>
+                        <td>{{$cliente->nombre}}</td>
+                        <td>{{$cliente->tipo}}</td>
+                        <td>{{$cliente->facturas}}</td>
+                        @foreach ($seguimientos as $seguimiento )
+                            @if ($seguimiento->id_cliente == $cliente->id)
+                            @php
+                                $total = $total + $seguimiento->total
+                            @endphp
+                            @endif
+                        @endforeach
+                        <td>{{$total}}$</td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm">
                                 <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                <a href="#" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                <a href="#" class="btn btn-dark"><i class="fas fa-edit"></i></a>
+                                @auth
+                                <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>    
+                                @endauth
                             </div>
-                        </th>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
