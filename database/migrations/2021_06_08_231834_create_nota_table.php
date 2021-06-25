@@ -29,14 +29,14 @@ class CreateNotaTable extends Migration
             $table->longText('productos')->nullable();
             $table->string('pesos')->nullable();
             // Datos de Reporte
-            $table->enum('forma_pago', ['Efectivo','Transferencia','Otro']);
+            $table->enum('forma_pago', ['Efectivo', 'Transferencia', 'Otro'])->nullable();
             $table->string('ref')->nullable()->default('N/P');
-            $table->float('total');
+            $table->float('total')->nullable()->default(0);
             $table->date('fecha_pago')->nullable();
-            $table->float('abono')->nullable()->default(0);
-            $table->float('debe')->nullable()->default(0);
-            $table->float('resta')->nullable()->default(0);
-            $table->float('descuento')->nullable()->default(0);
+            $table->float('abono')->nullable();
+            $table->float('debe')->nullable();
+            $table->float('resta')->nullable();
+            $table->float('descuento')->nullable();
             $table->string('observacion')->nullable();
             $table->enum('estado', ['Pendiente', 'Completada', 'Anulada'])->default('Pendiente');
 

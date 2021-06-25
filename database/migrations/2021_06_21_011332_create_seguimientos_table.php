@@ -17,15 +17,15 @@ class CreateSeguimientosTable extends Migration
             $table->id();
             $table->integer('id_cliente');
             $table->integer('id_factura');
-            
+
             $table->float('total');
             $table->date('fecha_pago')->nullable();
-            $table->enum('forma_pago', ['Efectivo','Transferencia','Otro']);
+            $table->enum('forma_pago', ['Efectivo', 'Transferencia', 'Otro'])->nullable();
             $table->string('ref')->nullable()->default('N/P');
-            $table->float('abono')->nullable()->default(0);
-            $table->float('debe')->nullable()->default(0);
-            $table->float('resta')->nullable()->default(0);
-            $table->float('descuento')->nullable()->default(0);
+            $table->float('abono')->nullable();
+            $table->float('debe')->nullable();
+            $table->float('resta')->nullable();
+            $table->float('descuento')->nullable();
 
             $table->timestamps();
             $table->charset = 'utf8mb4';

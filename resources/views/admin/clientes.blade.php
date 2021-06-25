@@ -2,6 +2,11 @@
 @section('titulo')
     Clientes
 @endsection
+@section('styles')
+<link rel="stylesheet" href="{{asset("assets/$theme/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")}}">
+<link rel="stylesheet" href="{{asset("assets/$theme/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")}}">
+<link rel="stylesheet" href="{{asset("assets/$theme/plugins/datatables-buttons/css/buttons.bootstrap4.min.css")}}">
+@endsection
 @section('contenido')
 {{--  Modal Agregar Producto --}}
 <div class="modal fade" id="creacion" tabindex="-1" role="dialog" aria-labelledby="creacionLabel">
@@ -12,7 +17,7 @@
                 <h4 class="modal-title text-center ml-4">Agregar Cliente</h4>
             </div>
             <div class="modal-body text-center">
-                <form class="form-horizontal" role="form" method="POST" action="/agregar_cliente" enctype="multipart/form-data"  id="form-nuevo">
+                <form class="form-horizontal" role="form" method="POST" action="{{ route('agg_cliente') }}" enctype="multipart/form-data"  id="form-nuevo">
                     @csrf
                     <div class="form-group row">
                         <label for="nombre" class="control-label col-sm-6">Nombre</label>
@@ -42,11 +47,11 @@
                         <label for="tipo" class="control-label col-sm-6">Tipo de Cliente</label>
                         <div class="col-6">
                             <select class="form-control" name="tipo">
-                              <option value="Minorista">Minorista</option>
-                              <option value="Mayorista">Mayorista</option>
-                              <option value="VIP">VIP</option>
+                                <option value="Minorista">Minorista</option>
+                                <option value="Mayorista">Mayorista</option>
+                                <option value="VIP">VIP</option>
                             </select>
-                          </div>
+                        </div>
                     </div>
                     <div class="form-group modal-footer d-inline">
                         <button type="submit" class="btn btn-primary float-left ml-5" id="btn-nuevo">
@@ -63,13 +68,13 @@
                     </div>  
                     --}}
                 </form>
-              <br><br>
-              {{$success = Session::get('success')}}
-              @if ($success)
-                  <div class="alert alert-success">
-                      <strong>!!Felicidades!!</strong>Se Creo el usuario Correctamente <br><br>
-                  </div>
-              @endif
+                <br><br>
+                {{$success = Session::get('success')}}
+                @if ($success)
+                    <div class="alert alert-success">
+                        <strong>!!Felicidades!!</strong>Se Creo el usuario Correctamente <br><br>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

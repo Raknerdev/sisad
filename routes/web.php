@@ -13,48 +13,40 @@ use Illuminate\Support\Facades\Route;
 |
 */
 // Rutas Principales
-Route::get('/', 'App\Http\Controllers\admin\AdminController@index');
+Route::get('/', 'App\Http\Controllers\admin\AdminController@index')->name('index');
 Route::get('/login', 'App\Http\Controllers\admin\PermisoController@index');
 // Rutas Vista Aside
-Route::get('/personal', 'App\Http\Controllers\admin\AdminController@personal');
-Route::get('/clientes', 'App\Http\Controllers\admin\AdminController@clientes');
-Route::get('/productos','App\Http\Controllers\admin\AdminController@productos');
-Route::get('/reporte', 'App\Http\Controllers\facturacion\FacturacionController@reporte');
-    // Facturacion
-Route::get('/factura_compra', 'App\Http\Controllers\facturacion\FacturacionController@compra');
-Route::get('/factura_venta', 'App\Http\Controllers\facturacion\FacturacionController@venta');
-Route::get('/nota_entrega', 'App\Http\Controllers\facturacion\FacturacionController@nota');
-        // View Item
-Route::get('/view_compra/{id}', 'App\Http\Controllers\facturacion\FacturacionController@showCompra');
-Route::get('/view_venta/{id}', 'App\Http\Controllers\facturacion\FacturacionController@showVenta');
-Route::get('/view_nota/{id}', 'App\Http\Controllers\facturacion\FacturacionController@showNota');
-        // Edit Item
-Route::get('/edit_compra/{id}', 'App\Http\Controllers\facturacion\FacturacionController@editCompra');
-Route::get('/edit_venta/{id}', 'App\Http\Controllers\facturacion\FacturacionController@editVenta');
-Route::get('/edit_nota/{id}', 'App\Http\Controllers\facturacion\FacturacionController@editNota');
-        // Edit Item Post
-Route::post('/update_nota/{id}', 'App\Http\Controllers\facturacion\FacturacionController@updateNota');
-        // Destroy
-Route::get('/compra_destroy/{id}', 'App\Http\Controllers\facturacion\FacturacionController@destroyCompra');
-Route::get('/venta_destroy/{id}', 'App\Http\Controllers\facturacion\FacturacionController@destroyVenta');
-Route::get('/nota_destroy/{id}', 'App\Http\Controllers\facturacion\FacturacionController@destroyNota');
+Route::get('/personal', 'App\Http\Controllers\admin\AdminController@personal')->name('personal');
+Route::get('/clientes', 'App\Http\Controllers\admin\AdminController@clientes')->name('clientes');
+Route::get('/productos', 'App\Http\Controllers\admin\AdminController@productos')->name('productos');
+Route::get('/reporte', 'App\Http\Controllers\facturacion\FacturacionController@reporte')->name('reporte');
+// Facturacion
+Route::get('/factura_compra', 'App\Http\Controllers\facturacion\FacturacionController@compra')->name('compras');
+Route::get('/factura_venta', 'App\Http\Controllers\facturacion\FacturacionController@venta')->name('ventas');
+Route::get('/nota_entrega', 'App\Http\Controllers\facturacion\FacturacionController@nota')->name('notas');
+// View Item
+Route::get('/view_compra/{id}', 'App\Http\Controllers\facturacion\FacturacionController@showCompra')->name('v_compra');
+Route::get('/view_venta/{id}', 'App\Http\Controllers\facturacion\FacturacionController@showVenta')->name('v_venta');
+Route::get('/view_nota/{id}', 'App\Http\Controllers\facturacion\FacturacionController@showNota')->name('v_nota');
+// Edit Item
+Route::get('/edit_compra/{id}', 'App\Http\Controllers\facturacion\FacturacionController@editCompra')->name('e_compra');
+Route::get('/edit_venta/{id}', 'App\Http\Controllers\facturacion\FacturacionController@editVenta')->name('e_venta');
+Route::get('/edit_nota/{id}', 'App\Http\Controllers\facturacion\FacturacionController@editNota')->name('e_nota');
+// Edit Item Post
+Route::post('/update_nota/{id}', 'App\Http\Controllers\facturacion\FacturacionController@updateNota')->name('up_nota');
+// Destroy
+Route::get('/compra_destroy/{id}', 'App\Http\Controllers\facturacion\FacturacionController@destroyCompra')->name('d_compra');
+Route::get('/venta_destroy/{id}', 'App\Http\Controllers\facturacion\FacturacionController@destroyVenta')->name('d_venta');
+Route::get('/nota_destroy/{id}', 'App\Http\Controllers\facturacion\FacturacionController@destroyNota')->name('d_nota');
 
 // Scripts Route
-Route::get('/list_clientes', 'App\Http\Controllers\admin\AdminController@listClients');
-Route::get('/list_prodcts', 'App\Http\Controllers\admin\AdminController@listProducts');
+Route::get('/list_clientes', 'App\Http\Controllers\admin\AdminController@listClients')->name('list_clients');
+Route::get('/list_prodcts', 'App\Http\Controllers\admin\AdminController@listProducts')->name('list_products');
 
 // Rutas POST
-Route::post('/agregar_producto','App\Http\Controllers\admin\AdminController@aggProducto');
-Route::post('/agregar_cliente','App\Http\Controllers\admin\AdminController@aggCliente');
-Route::post('/agregar_usuario','App\Http\Controllers\admin\AdminController@aggUsuario');
-Route::post('/agregar_compra','App\Http\Controllers\admin\AdminController@aggCompra');
-Route::post('/agregar_venta','App\Http\Controllers\admin\AdminController@aggVenta');
-Route::post('/agregar_nota','App\Http\Controllers\admin\AdminController@aggNota');
-
-    // Nota de Entrega
-Route::get('/nota', 'App\Http\Controllers\facturacion\NotaController@prueba');
-Route::get('/crear_nota_entrega', 'App\Http\Controllers\facturacion\NotaController@create');
-Route::get('/notas', 'App\Http\Controllers\facturacion\NotaController@index');
-
-
-
+Route::post('/agregar_producto', 'App\Http\Controllers\admin\AdminController@aggProducto')->name('agg_producto');
+Route::post('/agregar_cliente', 'App\Http\Controllers\admin\AdminController@aggCliente')->name('agg_cliente');
+Route::post('/agregar_usuario', 'App\Http\Controllers\admin\AdminController@aggUsuario')->name('agg_usuario');
+Route::post('/agregar_compra', 'App\Http\Controllers\admin\AdminController@aggCompra')->name('agg_compra');
+Route::post('/agregar_venta', 'App\Http\Controllers\admin\AdminController@aggVenta')->name('agg_venta');
+Route::post('/agregar_nota', 'App\Http\Controllers\admin\AdminController@aggNota')->name('agg_nota');
