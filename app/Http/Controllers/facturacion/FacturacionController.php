@@ -33,7 +33,8 @@ class FacturacionController extends Controller
     {
         $id_venta = decrypt($id);
         $venta = FacVenta::find($id_venta);
-        return view('facturacion.fventa', compact('venta'));
+        $producto = json_decode($venta->productos);
+        return view('facturacion.fventa', compact('venta', 'producto'));
     }
 
     public function destroyVenta($id)
@@ -55,8 +56,6 @@ class FacturacionController extends Controller
         $id_compra = decrypt($id);
         $compra = FacCompra::find($id_compra);
         $id_prod = json_decode($compra->productos);
-        $tipo = $compra->tipo_cliente;
-
         foreach ($id_prod as $prod) {
             $producto[] = Productos::find($prod);
         }
@@ -167,8 +166,10 @@ class FacturacionController extends Controller
                 $nota->resta = $nota->debe - $request->descuento;
             }
         }
+        if ($nota->nota != null) {
+            $nota->descuento = $nota->descuento - $costo;
+        }
 
-        $nota->descuento = $nota->descuento - $costo;
         $nota->save();
         // Seguimiento
         $nota_a = NotaEntega::find($id_nota);

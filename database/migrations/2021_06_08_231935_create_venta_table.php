@@ -15,30 +15,22 @@ class CreateVentaTable extends Migration
     {
         Schema::create('venta', function (Blueprint $table) {
             $table->id();
-            // Datos de Factura - Verificar
-            $table->integer('id_factura');
+            // Datos de Factura
             $table->string('nro_factura');
             $table->string('nro_control');
-            // $table->date('fecha_emision');
+            $table->date('fecha_emision');
             $table->string('nombre_c');
             $table->string('cedula_c');
             $table->string('telefono')->nullable();
             $table->string('direccion_c')->nullable();
-            // Aqui van los productos
-
-            // Continuamos xD
+            $table->longText('productos')->nullable();
+            $table->string('pesos')->nullable();
             $table->float('sub_total');
+            $table->float('iva');
+            $table->float('valor_iva');
             $table->float('total');
             $table->enum('tipo_cliente', ['Minorista', 'Mayorista', 'VIP']);
-            $table->enum('forma_pago', ['Efectivo','Transferencia','Otro']);
-            // $table->enum('productos', ['']);
-            // Datos para Reporte
-            $table->float('abono')->nullable()->default(0);
-            $table->float('resta')->nullable()->default(0);
-            $table->float('descuento')->nullable()->default(0);
-            $table->string('observacion')->nullable();
-            $table->enum('estado', ['Pendiente', 'Completada'])->default('Pendiente');
-            
+            $table->enum('forma_pago', ['Efectivo', 'Transferencia', 'Otro']);
             // Marca de Tiempo
             $table->timestamps();
             $table->charset = 'utf8mb4';

@@ -73,52 +73,54 @@
 
 <div class="container-fluid">
     <div class="row">
-      <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h3  class="d-inline">Lista de Productos</h3>
-                <button class="d-inline btn btn-info shadow float-right" id="btn-creacion" 
-                data-toggle="modal" data-target="#creacion" name="Agregar Producto">
-                    Agregar Producto 
-                </button>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3  class="d-inline">Lista de Productos</h3>
+                    <button class="d-inline btn btn-info shadow float-right" id="btn-creacion" 
+                    data-toggle="modal" data-target="#creacion" name="Agregar Producto">
+                        Agregar Producto 
+                    </button>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table id="productos" class="table table-bordered table-striped">
+                        <thead class="text-center">
+                            <tr>
+                                <th>Codigo</th>
+                                <th>Nombre de Producto</th>
+                                <th>Precio VIP</th>
+                                <th>Precio al Mayor</th>
+                                <th>Precio al Detal</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            @foreach ($products as $product)
+                            <tr>
+                                <th>{{$product->codigo}}</th>
+                                <th>{{$product->name}}</th>
+                                <th>{{$product->VIP}}$</th>
+                                <th>{{$product->Mayorista}}$</th>
+                                <th>{{$product->Minorista}}$</th>
+                                <th class="text-center">
+                                    <div class="btn-group btn-group-sm">
+                                        @auth
+                                            <a href="{{ route('v_producto', ['id'=>encrypt("$product->id")]) }}" class="btn btn-info"><i class="fas fa-eye"></i></a>  
+                                        @endauth
+                                        <a href="{{ route('e_producto', ['id'=>encrypt("$product->id")]) }}" class="btn btn-dark"><i class="fas fa-edit"></i></a>
+                                        @auth
+                                            <a href="{{ route('d_producto', ['id'=>encrypt("$product->id")]) }}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                        @endauth
+                                    </div>
+                                </th>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <table id="productos" class="table table-bordered table-striped">
-                <thead class="text-center">
-                    <tr>
-                        <th>Codigo</th>
-                        <th>Nombre de Producto</th>
-                        <th>Precio VIP</th>
-                        <th>Precio al Mayor</th>
-                        <th>Precio al Detal</th>
-                        <th>Acción</th>
-                      </tr>
-                </thead>
-                <tbody class="text-center">
-                    @foreach ($products as $product)
-                    <tr>
-                        <th>{{$product->codigo}}</th>
-                        <th>{{$product->name}}</th>
-                        <th>{{$product->VIP}}$</th>
-                        <th>{{$product->Mayorista}}$</th>
-                        <th>{{$product->Minorista}}$</th>
-                        <th class="text-center">
-                            <div class="btn-group btn-group-sm bg-dark">
-                                <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                <a href="#" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                            </div>
-                        </th>
-                    </tr>
-                    @endforeach
-                </tbody>
-                
-              </table>
-            </div>
-            <!-- /.card-body -->
-          </div>
-      </div>
+        </div>
     </div>
 </div>
 

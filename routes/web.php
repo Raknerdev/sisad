@@ -28,12 +28,14 @@ Route::get('/nota_entrega', 'App\Http\Controllers\facturacion\FacturacionControl
 Route::get('/view_compra/{id}', 'App\Http\Controllers\facturacion\FacturacionController@showCompra')->name('v_compra');
 Route::get('/view_venta/{id}', 'App\Http\Controllers\facturacion\FacturacionController@showVenta')->name('v_venta');
 Route::get('/view_nota/{id}', 'App\Http\Controllers\facturacion\FacturacionController@showNota')->name('v_nota');
-// Edit Item
+// VIew Edit Item
 Route::get('/edit_compra/{id}', 'App\Http\Controllers\facturacion\FacturacionController@editCompra')->name('e_compra');
 Route::get('/edit_venta/{id}', 'App\Http\Controllers\facturacion\FacturacionController@editVenta')->name('e_venta');
 Route::get('/edit_nota/{id}', 'App\Http\Controllers\facturacion\FacturacionController@editNota')->name('e_nota');
+Route::get('/edit_producto/{id}', 'App\Http\Controllers\admin\AdminController@editProducto')->name('e_producto');
 // Edit Item Post
 Route::post('/update_nota/{id}', 'App\Http\Controllers\facturacion\FacturacionController@updateNota')->name('up_nota');
+Route::post('/update_producto/{id}', 'App\Http\Controllers\admin\AdminController@updateProducto')->name('up_producto');
 // Destroy
 Route::get('/compra_destroy/{id}', 'App\Http\Controllers\facturacion\FacturacionController@destroyCompra')->name('d_compra');
 Route::get('/venta_destroy/{id}', 'App\Http\Controllers\facturacion\FacturacionController@destroyVenta')->name('d_venta');

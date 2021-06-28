@@ -70,6 +70,12 @@ class AdminController extends Controller
         $products = Productos::orderBy('id')->get();
         return view('admin.productos', compact('products'));
     }
+    public function editProducto($id)
+    {
+        $id_prod = decrypt($id);
+        $producto = Productos::find($id_prod);
+        return view('admin.editProducto', compact('producto'));
+    }
 
     public function aggProducto(Request $request)
     {
@@ -91,6 +97,27 @@ class AdminController extends Controller
         $prod->save();
 
         return back();
+    }
+    public function updateProducto(Request $request, $id)
+    {
+        $id_prod = decrypt($id);
+        $producto = Productos::find($id_prod);
+        if ($request->mayorista) {
+            $producto->Mayorista = $request->mayorista;
+        }
+        if ($request->minorista) {
+            $producto->Minorista = $request->minorista;
+        }
+        if ($request->vip) {
+            $producto->VIP = $request->vip;
+        }
+        if ($request->name) {
+            $producto->name = $request->name;
+        }
+        $producto->save();
+
+        $products = Productos::orderBy('id')->get();
+        return view('admin.productos', compact('products'));
     }
 
     public function personal()
@@ -160,46 +187,105 @@ class AdminController extends Controller
 
     public function aggVenta(Request $request)
     {
-        $prod = Productos::find($request->producto);
         $cliente = Clientes::find($request->cliente);
-        // Para hacer que los productos se cuenten 
-        $cf = FacVenta::orderBy('id_factura', 'desc')->first();
+        $cf = Control::orderBy('nro_factura', 'desc')->first();
+        $control = Control::orderBy('nro_factura_nota', 'desc')->first();
+        $cpi = Control::orderBy('nro_patio_i', 'desc')->first();
+        $cpii = Control::orderBy('nro_patio_ii', 'desc')->first();
         if ($cf) {
-            $nf = $cf->id_factura + 1;
+            $factura = $cf->nro_factura + 1;
         } else {
-            $nf = 1;
+            $factura = 0;
         }
-        $cc = FacVenta::orderBy('id_factura', 'desc')->first();
-        if ($cc) {
-            $nc = $cc->id_factura + 1;
+        if ($control) {
+            $nro_ctrlf = $control->nro_factura_nota + 1;
         } else {
-            $nc = 10;
+            $nro_ctrlf = 1;
         }
 
         $venta = new FacVenta();
+
+        if ($request->patio == 1) {
+            if ($cpi) {
+                $nro_ctrlpi = $cpi->nro_patio_i + 1;
+            } else {
+                $nro_ctrlpi = 1;
+            }
+            $venta->nro_control = 'CPTI-' . str_pad($nro_ctrlpi, 8, '0', STR_PAD_LEFT);
+        } elseif ($request->patio == 2) {
+            if ($cpii) {
+                $nro_ctrlpii = $cpii->nro_patio_ii + 1;
+            } else {
+                $nro_ctrlpii = 0;
+            }
+            $venta->nro_control = 'CPTII-' . str_pad($nro_ctrlpii, 8, '0', STR_PAD_LEFT);
+        }
         // Datos para Factura
-        $venta->id_factura = $nf;
-        $venta->nro_factura = 'FAC-' . str_pad($nf, 8, '0', STR_PAD_LEFT);
-        $venta->nro_control = 'CPI-' . str_pad($nc, 8, '0', STR_PAD_LEFT);
+        $venta->nro_factura = 'FAC-' . str_pad($nro_ctrlf, 8, '0', STR_PAD_LEFT);
+        $venta->fecha_emision = $request->fecha;
+
         $venta->nombre_c = $cliente->nombre;
         $venta->cedula_c = $cliente->cedula;
         $venta->telefono = $cliente->telefono;
         $venta->direccion_c = $cliente->direccion;
-
-        // $venta-> productos =;
-        $venta->sub_total = 0;
-        $venta->total = 0;
-
         $venta->tipo_cliente = $cliente->tipo;
         $venta->forma_pago = $request->forma_pago;
-        // Datos para Reporte
-        $venta->abono = 0;
-        // $venta-> resta = $request->
-        $venta->descuento = 0;
-        $venta->estado = 'Pendiente';
+
+        if ($request->peso[0] != null) {
+            $prod = $request->producto;
+            $pesos = $request->peso;
+            $tipo = $cliente->tipo;
+            foreach ($prod as $prodts) {
+                $productos[] = Productos::find($prodts);
+            }
+            $costo = 0;
+            for ($i = 0; $i < count($pesos); $i++) {
+                $pund = $productos[$i]->$tipo;
+                $cost = $pesos[$i] * $pund;
+                $costo = $costo + $cost;
+            }
+            $venta->sub_total = $costo;
+            $venta->productos = json_encode($productos);
+            $venta->pesos = json_encode($request->peso);
+            $venta->iva = $request->iva;
+            $venta->valor_iva = $costo * ($request->iva / 100);
+            $venta->total = $costo + $venta->valor_iva;
+        }
 
         $venta->save();
 
+        $control_c = Control::find(1);
+        if ($control_c) {
+            if ($request->patio == 1) {
+                $control_c->nro_patio_i = $nro_ctrlpi;
+                $control_c->nro_patio_ii = $cpi->nro_patio_ii;
+            } else {
+                $control_c->nro_patio_ii = $nro_ctrlpii;
+                $control_c->nro_patio_i = $cpi->nro_patio_i;
+            }
+            $control_c->nro_factura_nota = $nro_ctrlf;
+            $control_c->save();
+        } else {
+            $c = new Control();
+            $c->nro_factura = $factura;
+            if ($request->patio == 1) {
+                $c->nro_patio_i = $nro_ctrlpi;
+                if ($cpi) {
+                    $c->nro_patio_ii = $cpi->nro_patio_ii;
+                } else {
+                    $c->nro_patio_ii = 0;
+                }
+            } else {
+                $c->nro_patio_ii = $nro_ctrlpii;
+                if ($cpi) {
+                    $c->nro_patio_i = $cpi->nro_patio_i;
+                } else {
+                    $c->nro_patio_i = 0;
+                }
+            }
+            $c->nro_factura_nota = $nro_ctrlf;
+            $c->save();
+        }
         return back();
     }
 
@@ -211,7 +297,7 @@ class AdminController extends Controller
         $cpi = Control::orderBy('nro_patio_i', 'desc')->first();
         $cpii = Control::orderBy('nro_patio_ii', 'desc')->first();
         if ($cf) {
-            $factura = $cf->nro_factura;
+            $factura = $cf->nro_factura + 1;
         } else {
             $factura = 0;
         }
@@ -277,7 +363,7 @@ class AdminController extends Controller
             $nota->pesos = json_encode($request->peso);
 
             if ($request->avance) {
-                $nota->descuento = $costo - $request->avance;
+                $nota->descuento = $request->avance;
             } else {
                 $nota->descuento = 0;
             }

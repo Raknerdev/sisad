@@ -18,10 +18,10 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->integer('id_producto');
             $table->string('codigo');
-            $table->string('name');
-            $table->float('VIP');
-            $table->float('Mayorista');
-            $table->float('Minorista');
+            $table->string('name')->nullable();
+            $table->float('VIP')->nullable();
+            $table->float('Mayorista')->nullable();
+            $table->float('Minorista')->nullable();
             $table->timestamps();
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_spanish_ci';

@@ -80,7 +80,7 @@
                                 <div id="pes" class="col-sm-6">
                                     <label for="peso" class="control-label">peso</label>
                                     <div class="">
-                                        <input class="form-control" type="number" name="peso[]" id="peso" placeholder="15.3" min="1" step="0.01">
+                                        <input class="form-control" type="number" name="peso[]" id="peso" placeholder="15.3" min="0.01" step="0.01">
                                     </div>
                                 </div>
                             </div>
@@ -172,66 +172,66 @@
 </div>
 @endsection
 @section('scripts')
-<script src="{{asset("assets/lte/plugins/select2/js/select2.full.min.js")}}"></script>
-<script>
-    $(function() {
-        $('.select2').select2()
-        $('#btn-creacion').on('click', function () {
-            event.preventDefault();
-            var url =  "{{ url('/list_clientes')}}";
-            var urlProd =  "{{ url('/list_prodcts')}}";
-            // console.log(url);
-            $.get(url, function(data, status)
-            {
-                var $el = $("#cliente");
-                $el.empty();
-                $.each(data, function(key,value) {
-                $el.append($("<option></option>")
-                    .attr("value", key+1).text(value.nombre));
+    <script src="{{asset("assets/lte/plugins/select2/js/select2.full.min.js")}}"></script>
+    <script>
+        $(function() {
+            $('.select2').select2()
+            $('#btn-creacion').on('click', function () {
+                event.preventDefault();
+                var url =  "{{ url('/list_clientes')}}";
+                var urlProd =  "{{ url('/list_prodcts')}}";
+                // console.log(url);
+                $.get(url, function(data, status)
+                {
+                    var $el = $("#cliente");
+                    $el.empty();
+                    $.each(data, function(key,value) {
+                    $el.append($("<option></option>")
+                        .attr("value", key+1).text(value.nombre));
+                    });
+                    console.log(data);
+                }).fail(function()
+                {
+                    console.log("Error");
                 });
-                console.log(data);
-            }).fail(function()
-            {
-                console.log("Error");
-            });
-            $.get(urlProd, function(data, status)
-            {
-                var $el = $("#producto");
-                $el.empty();
-                $.each(data, function(key,value) {
-                $el.append($("<option></option>")
-                    .attr("value", key+1).text(value.name));
+                $.get(urlProd, function(data, status)
+                {
+                    var $el = $("#producto");
+                    $el.empty();
+                    $.each(data, function(key,value) {
+                    $el.append($("<option></option>")
+                        .attr("value", key+1).text(value.name));
+                    });
+                    console.log(data);
+                }).fail(function()
+                {
+                    console.log("Error");
                 });
-                console.log(data);
-            }).fail(function()
-            {
-                console.log("Error");
             });
         });
-    });
-</script>
-<script src="{{asset("assets/$theme/plugins/datatables/jquery.dataTables.min.js")}}"></script>
-<script src="{{asset("assets/$theme/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")}}"></script>
-<script src="{{asset("assets/$theme/plugins/datatables-responsive/js/dataTables.responsive.min.js")}}"></script>
-<script src="{{asset("assets/$theme/plugins/datatables-responsive/js/responsive.bootstrap4.min.js")}}"></script>
-<script src="{{asset("assets/$theme/plugins/datatables-buttons/js/dataTables.buttons.min.js")}}"></script>
-<script src="{{asset("assets/$theme/plugins/datatables-buttons/js/buttons.bootstrap4.min.js")}}"></script>
-<script src="{{asset("assets/$theme/plugins/jszip/jszip.min.js")}}"></script>
-<script src="{{asset("assets/$theme/plugins/pdfmake/pdfmake.min.js")}}"></script>
-<script src="{{asset("assets/$theme/plugins/pdfmake/vfs_fonts.js")}}"></script>
-<script src="{{asset("assets/$theme/plugins/datatables-buttons/js/buttons.html5.min.js")}}"></script>
-<script src="{{asset("assets/$theme/plugins/datatables-buttons/js/buttons.print.min.js")}}"></script>
-<script src="{{asset("assets/$theme/plugins/datatables-buttons/js/buttons.colVis.min.js")}}"></script>
+    </script>
+    <script src="{{asset("assets/$theme/plugins/datatables/jquery.dataTables.min.js")}}"></script>
+    <script src="{{asset("assets/$theme/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")}}"></script>
+    <script src="{{asset("assets/$theme/plugins/datatables-responsive/js/dataTables.responsive.min.js")}}"></script>
+    <script src="{{asset("assets/$theme/plugins/datatables-responsive/js/responsive.bootstrap4.min.js")}}"></script>
+    <script src="{{asset("assets/$theme/plugins/datatables-buttons/js/dataTables.buttons.min.js")}}"></script>
+    <script src="{{asset("assets/$theme/plugins/datatables-buttons/js/buttons.bootstrap4.min.js")}}"></script>
+    <script src="{{asset("assets/$theme/plugins/jszip/jszip.min.js")}}"></script>
+    <script src="{{asset("assets/$theme/plugins/pdfmake/pdfmake.min.js")}}"></script>
+    <script src="{{asset("assets/$theme/plugins/pdfmake/vfs_fonts.js")}}"></script>
+    <script src="{{asset("assets/$theme/plugins/datatables-buttons/js/buttons.html5.min.js")}}"></script>
+    <script src="{{asset("assets/$theme/plugins/datatables-buttons/js/buttons.print.min.js")}}"></script>
+    <script src="{{asset("assets/$theme/plugins/datatables-buttons/js/buttons.colVis.min.js")}}"></script>
 
-<script>
-    $(function () {
-        $("#notas").DataTable({
-            "responsive": true,
-            "searching": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            {{--  "buttons": ["excel", "pdf", "print"]  --}}
-        }).buttons().container().appendTo('#notas_wrapper .col-md-6:eq(0)');
-    });
-</script>
+    <script>
+        $(function () {
+            $("#notas").DataTable({
+                "responsive": true,
+                "searching": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                {{--  "buttons": ["excel", "pdf", "print"]  --}}
+            }).buttons().container().appendTo('#notas_wrapper .col-md-6:eq(0)');
+        });
+    </script>
 @endsection

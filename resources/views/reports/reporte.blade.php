@@ -67,7 +67,13 @@
                                             <td>{{$reporte->total}}$</td>
                                             <td>{{$reporte->abono}}$</td>
                                             <td>{{$resta = $reporte->resta - $reporte->descuento}}$</td>
-                                            <td>{{$reporte->descuento}}$</td>
+                                            <td>
+                                                @if ($reporte->descuento > 0)
+                                                    {{$reporte->descuento}}$
+                                                @else
+                                                    0$
+                                                @endif
+                                            </td>
                                             <td>{{$reporte->estado}}</td>
                                             <td>
                                                 <div class="btn-group btn-group-sm">
@@ -142,7 +148,13 @@
                                             <td>{{$reporte->total}}$</td>
                                             <td>{{$reporte->abono}}$</td>
                                             <td>{{$reporte->resta}}$</td>
-                                            <td>{{$reporte->descuento}}$</td>
+                                            <td>
+                                                @if ($reporte->descuento > 0)
+                                                    {{$reporte->descuento}}$
+                                                @else
+                                                    0$
+                                                @endif
+                                            </td>
                                             <td>{{$reporte->estado}}</td>
                                             <td>
                                                 <div class="btn-group btn-group-sm">
@@ -217,7 +229,13 @@
                                             <td>{{$reporte->total}}$</td>
                                             <td>{{$reporte->abono}}$</td>
                                             <td>{{$reporte->resta}}$</td>
-                                            <td>{{$reporte->descuento}}$</td>
+                                            <td>
+                                                @if ($reporte->descuento > 0)
+                                                    {{$reporte->descuento}}$
+                                                @else
+                                                    0$
+                                                @endif
+                                            </td>
                                             <td>{{$reporte->estado}}</td>
                                             <td>
                                                 <div class="btn-group btn-group-sm">
@@ -291,7 +309,13 @@
                                             <td>{{$reporte->total}}$</td>
                                             <td>{{$reporte->abono}}$</td>
                                             <td>{{$reporte->resta}}$</td>
-                                            <td>{{$reporte->descuento}}$</td>
+                                            <td>
+                                                @if ($reporte->descuento > 0)
+                                                    {{$reporte->descuento}}$
+                                                @else
+                                                    0$
+                                                @endif
+                                            </td>
                                             <td>{{$reporte->estado}}</td>
                                             <td>
                                                 <div class="btn-group btn-group-sm">
@@ -320,7 +344,13 @@
                                             <th>{{$total_monto}}$</th>
                                             <th>{{$total_abono}}$</th>
                                             <th>{{$total_resta}}$</th>
-                                            <th>{{$total_descuento}}$</th>
+                                            <th>
+                                                @if ($total_descuento > 0)
+                                                    {{$total_descuento}}$
+                                                @else
+                                                    0$
+                                                @endif
+                                            </th>
                                             <th colspan="2"></th>
                                         </tr>
                                     </tfoot>         

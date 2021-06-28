@@ -184,13 +184,34 @@
                 <td>{{$cont=$cont+1}}</td>
                 <td>{{$seguimiento->total}}$</td>
                 <td>{{$seguimiento->fecha_pago}}</td>
-                <td>{{$seguimiento->forma_pago}}</td>
+                <td>
+                    @if ($seguimiento->forma_pago == null)
+                        N/P
+                    @else
+                    {{$seguimiento->forma_pago}}
+                    @endif
+                </td>
                 <td>{{$seguimiento->ref}}</td>
-                <td>{{$seguimiento->abono}}$</td>
-                <td>{{$seguimiento->debe }}$</td>
+                <td>
+                    @if ($seguimiento->abono != null)
+                        {{$seguimiento->abono}}$
+                    @else
+                        0$
+                    @endif
+                    
+                </td>
+                <td>
+                    @if ($seguimiento->debe != null)
+                        {{$seguimiento->debe }}$
+                    @else
+                        0$
+                    @endif
+                </td>
                 <td>
                     @if ($seguimiento->descuento > 0)
                         {{$seguimiento->descuento + $seguimiento->debe}}$
+                    @else
+                        0$
                     @endif
                 </td>
                 <td>{{$seguimiento->resta}}$</td>

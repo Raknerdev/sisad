@@ -42,15 +42,10 @@
             {{--  Fin Footer  --}}
         {{-- jQuery  --}}
         <script src="{{asset("assets/$theme/plugins/jquery/jquery.min.js")}}"></script>
-        {{--  Bootstrap 4  --}}
         <script src="{{asset("assets/$theme/plugins/bootstrap/js/bootstrap.bundle.min.js")}}"></script>
-        {{--  overlayScrollbars  --}}
         <script src="{{asset("assets/$theme/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
         @yield('scripts')
-        {{--  AdminLTE App  --}}
         <script src="{{asset("assets/$theme/dist/js/adminlte.min.js")}}"></script>
-        {{--  AdminLTE for demo purposes
-        <script src="{{asset("assets/$theme/dist/js/demo.js")}}"></script>  --}}
         
     </body>
 </html>

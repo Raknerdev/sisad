@@ -67,12 +67,13 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
-            {{-- <li class="nav-item">
+            <li class="nav-item">
               <a href="{{ route('ventas') }}" class="nav-link">
                 <i class="fas fa-edit nav-icon"></i>
                 <p>Facturas de Venta</p>
               </a>
             </li>
+            {{-- 
             <li class="nav-item">
               <a href="{{ route('compras') }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
