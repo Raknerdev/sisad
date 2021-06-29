@@ -103,7 +103,7 @@
                         <th>Facturas Registradas</th>
                         <th>Valor Total</th>
                         <th>Acción</th>
-                      </tr>
+                    </tr>
                 </thead>
                 <tbody class="text-center">
                     @foreach ($clientes as $cliente)
@@ -115,10 +115,10 @@
                         <td>{{$cliente->nombre}}</td>
                         <td>{{$cliente->tipo}}</td>
                         <td>{{$cliente->facturas}}</td>
-                        @foreach ($seguimientos as $seguimiento )
-                            @if ($seguimiento->id_cliente == $cliente->id)
+                        @foreach ($notas as $nota )
+                            @if ($nota->id_cliente == $cliente->id)
                             @php
-                                $total = $total + $seguimiento->total
+                                $total = $total + $nota->total
                             @endphp
                             @endif
                         @endforeach

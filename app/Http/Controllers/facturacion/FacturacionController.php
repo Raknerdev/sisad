@@ -80,7 +80,8 @@ class FacturacionController extends Controller
     {
         $id_nota = decrypt($id);
         $nota = NotaEntega::find($id_nota);
-        return view('facturacion.fnota', compact('nota'));
+        $producto = json_decode($nota->productos);
+        return view('facturacion.fnota', compact('nota', 'producto'));
     }
 
     public function destroyNota($id)

@@ -29,9 +29,9 @@ class AdminController extends Controller
 
     public function clientes()
     {
-        $seguimientos = Seguimiento::orderBy('id')->get();
+        $notas = NotaEntega::orderBy('id')->get();
         $clientes = Clientes::orderBy('id')->get();
-        return view('admin.clientes', compact('clientes', 'seguimientos'));
+        return view('admin.clientes', compact('clientes', 'notas'));
     }
 
     public function aggCliente(Request $request)
@@ -195,12 +195,12 @@ class AdminController extends Controller
         if ($cf) {
             $factura = $cf->nro_factura + 1;
         } else {
-            $factura = 0;
+            $factura = 1;
         }
         if ($control) {
-            $nro_ctrlf = $control->nro_factura_nota + 1;
+            $nro_ctrlf = $control->nro_factura_nota;
         } else {
-            $nro_ctrlf = 1;
+            $nro_ctrlf = 0;
         }
 
         $venta = new FacVenta();
@@ -221,7 +221,7 @@ class AdminController extends Controller
             $venta->nro_control = 'CPTII-' . str_pad($nro_ctrlpii, 8, '0', STR_PAD_LEFT);
         }
         // Datos para Factura
-        $venta->nro_factura = 'FAC-' . str_pad($nro_ctrlf, 8, '0', STR_PAD_LEFT);
+        $venta->nro_factura = 'FVCE-' . str_pad($factura, 8, '0', STR_PAD_LEFT);
         $venta->fecha_emision = $request->fecha;
 
         $venta->nombre_c = $cliente->nombre;
@@ -297,7 +297,7 @@ class AdminController extends Controller
         $cpi = Control::orderBy('nro_patio_i', 'desc')->first();
         $cpii = Control::orderBy('nro_patio_ii', 'desc')->first();
         if ($cf) {
-            $factura = $cf->nro_factura + 1;
+            $factura = $cf->nro_factura;
         } else {
             $factura = 0;
         }
@@ -308,7 +308,7 @@ class AdminController extends Controller
         }
 
         $nota = new NotaEntega();
-        $nota->ctrl_factura = 'FCE-' . str_pad($nro_ctrlf, 5, '0', STR_PAD_LEFT);
+        $nota->ctrl_factura = 'FCNE-' . str_pad($nro_ctrlf, 5, '0', STR_PAD_LEFT);
         $nota->fecha_emision = $request->fecha;
         $nota->id_cliente = $cliente->id;
         $nota->cod_cliente = $cliente->codigo;

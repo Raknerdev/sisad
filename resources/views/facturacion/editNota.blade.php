@@ -182,7 +182,7 @@
             @if ($seguimiento->id_factura == $nota->id)
             <tr>
                 <td>{{$cont=$cont+1}}</td>
-                <td>{{$seguimiento->total}}$</td>
+                <td>{{round($seguimiento->total)}}$</td>
                 <td>{{$seguimiento->fecha_pago}}</td>
                 <td>
                     @if ($seguimiento->forma_pago == null)
@@ -194,7 +194,7 @@
                 <td>{{$seguimiento->ref}}</td>
                 <td>
                     @if ($seguimiento->abono != null)
-                        {{$seguimiento->abono}}$
+                        {{round($seguimiento->abono)}}$
                     @else
                         0$
                     @endif
@@ -202,19 +202,19 @@
                 </td>
                 <td>
                     @if ($seguimiento->debe != null)
-                        {{$seguimiento->debe }}$
+                        {{round($seguimiento->debe)}}$
                     @else
                         0$
                     @endif
                 </td>
                 <td>
                     @if ($seguimiento->descuento > 0)
-                        {{$seguimiento->descuento + $seguimiento->debe}}$
+                        {{round($seguimiento->descuento + $seguimiento->debe)}}$
                     @else
                         0$
                     @endif
                 </td>
-                <td>{{$seguimiento->resta}}$</td>
+                <td>{{round($seguimiento->resta)}}$</td>
             </tr>
             @endif
             @endforeach

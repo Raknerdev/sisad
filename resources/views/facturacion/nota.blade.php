@@ -150,7 +150,7 @@
                                 <th>{{$nota->fecha_emision}}</th>
                                 <th>{{$nota->ctrl_factura}}</th>
                                 <th>{{$nota->nombre_c}}</th>
-                                <th>{{$nota->total}}</th>
+                                <th>{{round($nota->total)}}$</th>
                                 <th>{{$nota->estado}}</th>
                                 <th>
                                     <div class="btn-group btn-group-sm">

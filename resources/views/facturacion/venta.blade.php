@@ -132,7 +132,7 @@
                                 <th>{{$factura->fecha_emision}}</th>
                                 <th>{{$factura->nro_factura}}</th>
                                 <th>{{$factura->nombre_c}}</th>
-                                <th>{{$factura->total}}</th>
+                                <th>{{round($factura->sub_total)}}</th>
                                 <th>
                                     <div class="btn-group btn-group-sm">
                                         <a href="{{ route('v_venta', ['id'=>encrypt("$factura->id")]) }}" class="btn btn-info"><i class="fas fa-eye"></i></a>
