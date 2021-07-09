@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\admin\Productos;
 use App\Models\admin\Clientes;
 use App\Models\admin\Permiso;
+use App\Models\admin\Stock;
+use App\Models\admin\StockRecords;
 use App\Models\facturacion\Control;
 use App\Models\facturacion\FacVenta;
 use App\Models\facturacion\FacCompra;
@@ -118,6 +120,20 @@ class AdminController extends Controller
 
         $products = Productos::orderBy('id')->get();
         return view('admin.productos', compact('products'));
+    }
+
+    public function stock()
+    {
+        // return view('productos.index');
+        $fecha = date('Y-m-d');
+        $registro = Stock::orderBy('id')->get();
+        $records = StockRecords::orderBy('id')->get();
+        for ($i = 0; $i < count($records); $i++) {
+            if ($records[$i]->fecha == $fecha) {
+                $record = $records[$i];
+            }
+        }
+        return view('admin.inventario', compact('registro', 'record'));
     }
 
     public function personal()
@@ -292,10 +308,50 @@ class AdminController extends Controller
     public function aggNota(Request $request)
     {
         $cliente = Clientes::find($request->cliente);
+        $registros = Stock::orderBy('id')->get();
+        $records = StockRecords::orderBy('id')->get();
         $cf = Control::orderBy('nro_factura', 'desc')->first();
         $control = Control::orderBy('nro_factura_nota', 'desc')->first();
         $cpi = Control::orderBy('nro_patio_i', 'desc')->first();
         $cpii = Control::orderBy('nro_patio_ii', 'desc')->first();
+        $stock = null;
+        $registro = null;
+        if ($registros == null) {
+            $almacen = new Stock();
+        } else {
+            for ($i = 0; $i < count($registros); $i++) {
+                if ($registros[$i]->fecha == $request->fecha) {
+                    $stock = $registros[$i];
+                } else {
+                    $stock = null;
+                }
+            }
+            if ($stock == null) {
+                $almacen = new Stock();
+                $almacen->fecha = $request->fecha;
+            } else {
+                $almacen = Stock::find($stock->id);
+            }
+        }
+
+        if ($records == null) {
+            $regist = new StockRecords();
+        } else {
+            for ($i = 0; $i < count($records); $i++) {
+                if ($records[$i]->fecha == $request->fecha) {
+                    $registro = $records[$i];
+                } else {
+                    $registro = null;
+                }
+            }
+            if ($registro == null) {
+                $regist = new StockRecords();
+                $regist->fecha = $request->fecha;
+            } else {
+                $regist = StockRecords::find($registro->id);
+            }
+        }
+
         if ($cf) {
             $factura = $cf->nro_factura;
         } else {
@@ -357,6 +413,18 @@ class AdminController extends Controller
                 $pund = $productos[$i]->$tipo;
                 $cost = $pesos[$i] * $pund;
                 $costo = $costo + $cost;
+
+                $nombre = $productos[$i]->name;
+                if ($almacen->$nombre == null) {
+                    $almacen->$nombre = $pesos[$i];
+                } else {
+                    $almacen->$nombre = $almacen->$nombre + $pesos[$i];
+                }
+                if ($regist->$nombre == null) {
+                    $regist->$nombre = $pesos[$i];
+                } else {
+                    $regist->$nombre = $regist->$nombre + $pesos[$i];
+                }
             }
             $nota->total = $costo;
             $nota->productos = json_encode($productos);
@@ -382,6 +450,8 @@ class AdminController extends Controller
             $nota->abono = 0;
             $nota->resta = $nota->debe - $nota->descuento;
         }
+        $almacen->save();
+        $regist->save();
         $nota->save();
 
         $client = Clientes::find($cliente->id);

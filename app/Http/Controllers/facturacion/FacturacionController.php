@@ -84,6 +84,13 @@ class FacturacionController extends Controller
         return view('facturacion.fnota', compact('nota', 'producto'));
     }
 
+    public function showNotaPago($id)
+    {
+        $id_nota = decrypt($id);
+        $nota = NotaEntega::find($id_nota);
+        return view('facturacion.fnpago', compact('nota'));
+    }
+
     public function destroyNota($id)
     {
         $id_nota = decrypt($id);

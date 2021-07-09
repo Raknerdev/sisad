@@ -1,6 +1,6 @@
 @extends("theme.$theme.layout")
 @section('titulo')
-    Productos
+    Almacen
 @endsection
 @section('styles')
 <link rel="stylesheet" href="{{asset("assets/$theme/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")}}">
@@ -49,6 +49,14 @@
                         </button>
                         <button type="button" class="btn btn-danger float-right mr-5" data-dismiss="modal">Cancelar</button>
                     </div>
+                    {{--  Cargar Archivo
+                    <div class="form-group">
+                        <label for="c_documento" class="col-md-4 control-label">Archivo</label>
+                        <div class="col-md-6">
+                            <input type="file" required name="archivo" id="archivo" name="archivo"/>
+                        </div>
+                    </div>  
+                    --}}
                 </form>
                 <br><br>
                 {{$success = Session::get('success')}}
@@ -68,46 +76,78 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3  class="d-inline">Lista de Productos</h3>
-                    {{--  <button class="d-inline btn btn-info shadow float-right" id="btn-creacion" 
+                    <h3  class="d-inline">Almacen <?php echo date("d-m-Y");?></h3>
+                    <button class="d-inline btn btn-info shadow float-right" id="btn-creacion" 
                     data-toggle="modal" data-target="#creacion" name="Agregar Producto">
-                        Agregar Producto 
-                    </button>  --}}
+                        Salida de Producto
+                    </button>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
                     <table id="productos" class="table table-bordered table-striped">
                         <thead class="text-center">
                             <tr>
-                                <th>Codigo</th>
-                                <th>Nombre de Producto</th>
-                                <th>Precio VIP</th>
-                                <th>Precio al Mayor</th>
-                                <th>Precio al Detal</th>
-                                <th>Acción</th>
+                                <th>Nombre del Producto</th>
+                                <th>Ingreso del Día</th>
+                                <th>Total Disponible</th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            @foreach ($products as $product)
-                            <tr>
-                                <th>{{$product->codigo}}</th>
-                                <th>{{$product->name}}</th>
-                                <th>{{$product->VIP}}$</th>
-                                <th>{{$product->Mayorista}}$</th>
-                                <th>{{$product->Minorista}}$</th>
-                                <th class="text-center">
-                                    <div class="btn-group btn-group-sm">
-                                        @auth
-                                            <a href="{{ route('v_producto', ['id'=>encrypt("$product->id")]) }}" class="btn btn-info"><i class="fas fa-eye"></i></a>  
-                                        @endauth
-                                        <a href="{{ route('e_producto', ['id'=>encrypt("$product->id")]) }}" class="btn btn-dark"><i class="fas fa-edit"></i></a>
-                                        @auth
-                                            <a href="{{ route('d_producto', ['id'=>encrypt("$product->id")]) }}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                                        @endauth
-                                    </div>
-                                </th>
-                            </tr>
-                            @endforeach
+                            @if ($registro)
+                                @php
+                                    $prod1 = "ACERO CORTO";
+                                    $prod2 = "ACERO LARGO";
+                                    $prod3 = "ALUMINIO";
+                                    $prod4 = "BATERIAS";
+                                    $prod5 = "CALAMINA";
+                                    $prod6 = "CHATARRA";
+                                    $prod7 = "CORTO PESADO";
+                                    $prod8 = "DURO";
+                                    $prod9 = "LARGO PESADO";
+                                    $prod10 = "LATA";
+                                    $prod11 = "LATON";
+                                    $prod12 = "MARGINAL";
+                                    $prod13 = "MIXTO";
+                                    $prod14 = "MOTOR DE NEVERA";
+                                    $prod15 = "PERFIL";
+                                    $prod16 = "PLASTICO";
+                                    $prod17 = "PLOMO CHATARRA";
+                                    $prod18 = "PLOMO LINGOTE";
+                                    $prod19 = "POTE";
+                                    $prod20 = "RA";
+                                    $prod21 = "RCA";
+                                    $prod22 = "RL";
+                                    $prod23 = "TARJETAS DE COMPUTADORA";
+                                    $fecha = date('Y-m-d');
+                                @endphp
+                                @foreach ($registro as $reg)
+                                    @if ($reg->fecha == $fecha && $record != null)
+                                        <tr><th>{{$prod1 }}</th><th>{{$record->$prod1 }} kg</th><th>{{$reg->$prod1 }} kg</th></tr>
+                                        <tr><th>{{$prod2 }}</th><th>{{$record->$prod2 }} kg</th><th>{{$reg->$prod2 }} kg</th></tr>
+                                        <tr><th>{{$prod3 }}</th><th>{{$record->$prod3 }} kg</th><th>{{$reg->$prod3 }} kg</th></tr>
+                                        <tr><th>{{$prod4 }}</th><th>{{$record->$prod4 }} kg</th><th>{{$reg->$prod4 }} kg</th></tr>
+                                        <tr><th>{{$prod5 }}</th><th>{{$record->$prod5 }} kg</th><th>{{$reg->$prod5 }} kg</th></tr>
+                                        <tr><th>{{$prod6 }}</th><th>{{$record->$prod6 }} kg</th><th>{{$reg->$prod6 }} kg</th></tr>
+                                        <tr><th>{{$prod7 }}</th><th>{{$record->$prod7 }} kg</th><th>{{$reg->$prod7 }} kg</th></tr>
+                                        <tr><th>{{$prod8 }}</th><th>{{$record->$prod8 }} kg</th><th>{{$reg->$prod8 }} kg</th></tr>
+                                        <tr><th>{{$prod9 }}</th><th>{{$record->$prod9 }} kg</th><th>{{$reg->$prod9 }} kg</th></tr>
+                                        <tr><th>{{$prod10}}</th><th>{{$record->$prod10}} kg</th><th>{{$reg->$prod10}} kg</th></tr>
+                                        <tr><th>{{$prod11}}</th><th>{{$record->$prod11}} kg</th><th>{{$reg->$prod11}} kg</th></tr>
+                                        <tr><th>{{$prod12}}</th><th>{{$record->$prod12}} kg</th><th>{{$reg->$prod12}} kg</th></tr>
+                                        <tr><th>{{$prod13}}</th><th>{{$record->$prod13}} kg</th><th>{{$reg->$prod13}} kg</th></tr>
+                                        <tr><th>{{$prod14}}</th><th>{{$record->$prod14}} kg</th><th>{{$reg->$prod14}} kg</th></tr>
+                                        <tr><th>{{$prod15}}</th><th>{{$record->$prod15}} kg</th><th>{{$reg->$prod15}} kg</th></tr>
+                                        <tr><th>{{$prod16}}</th><th>{{$record->$prod16}} kg</th><th>{{$reg->$prod16}} kg</th></tr>
+                                        <tr><th>{{$prod17}}</th><th>{{$record->$prod17}} kg</th><th>{{$reg->$prod17}} kg</th></tr>
+                                        <tr><th>{{$prod18}}</th><th>{{$record->$prod18}} kg</th><th>{{$reg->$prod18}} kg</th></tr>
+                                        <tr><th>{{$prod19}}</th><th>{{$record->$prod19}} kg</th><th>{{$reg->$prod19}} kg</th></tr>
+                                        <tr><th>{{$prod20}}</th><th>{{$record->$prod20}} kg</th><th>{{$reg->$prod20}} kg</th></tr>
+                                        <tr><th>{{$prod21}}</th><th>{{$record->$prod21}} kg</th><th>{{$reg->$prod21}} kg</th></tr>
+                                        <tr><th>{{$prod22}}</th><th>{{$record->$prod22}} kg</th><th>{{$reg->$prod22}} kg</th></tr>
+                                        <tr><th>{{$prod23}}</th><th>{{$record->$prod23}} kg</th><th>{{$reg->$prod23}} kg</th></tr>
+                                    @endif
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -137,7 +177,7 @@
     $(function () {
         $("#productos").DataTable({
             "responsive": true,
-            "searching": true,
+            "searching": false,
             "lengthChange": false,
             "autoWidth": false,
             "buttons": ["excel", "pdf", "print"]

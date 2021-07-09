@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="row mt-3 table-responsive">
-            <table class="table table-striped ">
+            <table class="table table-striped text-monospace">
                 <thead>
                     <tr>
                         <th style="width: 10%;">Ítem</th>
@@ -63,7 +63,7 @@
                         <td>{{round($cost = $pesos[$i] * $producto[$i]->$tipo)}}$</td>
                     </tr>
                     @php
-                        $costo = $costo + $cost;
+                        $costo = $costo + round($cost);
                     @endphp
                     @endfor
                     {{--  Fin Lista de Productos  --}}

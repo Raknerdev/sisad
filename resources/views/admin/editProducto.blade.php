@@ -19,7 +19,7 @@
                         <div class="card-body ">
                             <div class="form-group row mx-auto">
                                 <label for="name" class="control-label col-sm-4 text-right mt-1 mr-3">Nombre</label>
-                                <input type="text" class="form-control col-sm-7" name="name" placeholder="{{$producto->name}}">
+                                <input type="text" class="form-control col-sm-7" name="name" placeholder="{{$producto->name}}" disabled>
                             </div>
                             <div class="form-group row mx-auto">
                                 <label for="mayorista" class="control-label col-sm-4 text-right mt-1 mr-3">Precio Mayorista</label>

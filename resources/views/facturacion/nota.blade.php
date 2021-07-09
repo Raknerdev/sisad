@@ -102,7 +102,6 @@
                         </div>
                     </div>  
                     --}}
-                    <!-- El id="canciones" indica que la función de JavaScript dejará aquí el resultado -->
                 </form>
                 <br><br>
                 {{$success = Session::get('success')}}
@@ -178,7 +177,7 @@
             $('.select2').select2()
             $('#btn-creacion').on('click', function () {
                 event.preventDefault();
-                var url =  "{{ url('/list_clientes')}}";
+                var url =  "{{ url('/list_customers')}}";
                 var urlProd =  "{{ url('/list_prodcts')}}";
                 // console.log(url);
                 $.get(url, function(data, status)

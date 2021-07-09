@@ -54,10 +54,10 @@
                             <option value="Otro">Otro</option>
                         </select>
                     </div>
-                    <div class="form-group row">
+                    {{--  <div class="form-group row">
                         <label for="iva" class="control-label col-sm-6">IVA</label>
                         <input class="form-control col-sm-6" type="number" name="iva" placeholder="8" min="0" required>
-                    </div>
+                    </div>  --}}
                     <div class="form-group">
                         <input type="button" class="btn btn-primary col-12" onclick="aggProd();" value="Agregar Producto" />
                     </div>

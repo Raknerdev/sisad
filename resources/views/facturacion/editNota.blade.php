@@ -63,7 +63,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <a href="{{ route('v_nota', ['id'=>encrypt("$nota->id")]) }}" class="card-footer btn bg-gradient-lightblue text-bold">Vista de Impresión</a>
+                    <div class="container-fluid mb-3 d-flex justify-content-between w-75">
+                        <a href="{{ route('v_nota', ['id'=>encrypt("$nota->id")]) }}" class="btn bg-gradient-lightblue text-bold">Imprimir Nota</a>
+                        <a href="{{ route('v_nota_pago', ['id'=>encrypt("$nota->id")]) }}" class="btn bg-gradient-success text-bold">Nota de Pago</a>
+                    </div>
+                    
                 </div>
             </div>
             {{--  Seguimientos  --}}

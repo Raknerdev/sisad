@@ -21,12 +21,27 @@
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <li class="nav-item">
-          <a href="{{ route('reporte') }}" class="nav-link">
+          <a href="#" class="nav-link menu-is-opening menu-open">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
               Reporte
+              <i class="fas fa-angle-left right"></i>
             </p>
           </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{ route('reporte') }}" class="nav-link">
+                <i class="fas fa-chart-bar nav-icon"></i>
+                <p>Reporte de Facturas</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('almacen') }}" class="nav-link">
+                <i class="fas fa-cubes nav-icon"></i>
+                <p>Almacen</p>
+              </a>
+            </li>
+          </ul>
         </li>
         @auth
         <li class="nav-item">
