@@ -54,3 +54,4 @@ Route::post('/agregar_usuario', 'App\Http\Controllers\admin\AdminController@aggU
 Route::post('/agregar_compra', 'App\Http\Controllers\admin\AdminController@aggCompra')->name('agg_compra');
 Route::post('/agregar_venta', 'App\Http\Controllers\admin\AdminController@aggVenta')->name('agg_venta');
 Route::post('/agregar_nota', 'App\Http\Controllers\admin\AdminController@aggNota')->name('agg_nota');
+Route::post('/update_stock', 'App\Http\Controllers\admin\AdminController@stockUpdate')->name('up_inv');

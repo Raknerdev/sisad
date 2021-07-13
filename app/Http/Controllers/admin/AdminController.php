@@ -124,16 +124,68 @@ class AdminController extends Controller
 
     public function stock()
     {
-        // return view('productos.index');
         $fecha = date('Y-m-d');
         $registro = Stock::orderBy('id')->get();
+        $records = StockRecords::orderBy('id')->get();
+        $record = null;
+        if ($records) {
+            for ($i = 0; $i < count($records); $i++) {
+                if ($records[$i]->fecha == $fecha) {
+                    $record = $records[$i];
+                }
+            }
+        }
+        // var_dump($record);
+        return view('admin.inventario', compact('registro', 'record'));
+    }
+    public function stockUpdate(Request $request)
+    {
+        $fecha = date('Y-m-d');
+        $registro = Stock::orderBy('id')->get();
+        if ($registro) {
+            $control_reg = Stock::find(1);
+        } else {
+            $control_reg = new Stock();
+        }
         $records = StockRecords::orderBy('id')->get();
         for ($i = 0; $i < count($records); $i++) {
             if ($records[$i]->fecha == $fecha) {
                 $record = $records[$i];
+                $reg = StockRecords::find($record->id);
+                if ($request->peso[0] != null) {
+                    $prod = $request->producto;
+                    $pesos = $request->peso;
+                    foreach ($prod as $prodts) {
+                        $productos[] = Productos::find($prodts);
+                    }
+                    for ($i = 0; $i < count($pesos); $i++) {
+                        $nombre = $productos[$i]->name;
+                        $reg->$nombre = $record->$nombre - $pesos[$i];
+                        $control_reg->$nombre = $control_reg->$nombre - $pesos[$i];
+                    }
+                    $reg->save();
+                    $control_reg->save();
+                }
+            } else {
+                $record = new StockRecords();
+                $record->fecha = $fecha;
+                if ($request->peso[0] != null) {
+                    $prod = $request->producto;
+                    $pesos = $request->peso;
+                    foreach ($prod as $prodts) {
+                        $productos[] = Productos::find($prodts);
+                    }
+                    for ($i = 0; $i < count($pesos); $i++) {
+                        $nombre = $productos[$i]->name;
+                        $record->$nombre = $record->$nombre - $pesos[$i];
+                        $control_reg->$nombre = $control_reg->$nombre - $pesos[$i];
+                    }
+                    $control_reg->save();
+                    $record->save();
+                }
             }
         }
-        return view('admin.inventario', compact('registro', 'record'));
+        return back();
     }
 
     public function personal()
@@ -150,7 +202,6 @@ class AdminController extends Controller
         $user->email = $request->correo;
         $user->password = $request->password;
         $user->save();
-
         return back();
     }
 
@@ -314,34 +365,18 @@ class AdminController extends Controller
         $control = Control::orderBy('nro_factura_nota', 'desc')->first();
         $cpi = Control::orderBy('nro_patio_i', 'desc')->first();
         $cpii = Control::orderBy('nro_patio_ii', 'desc')->first();
-        $stock = null;
-        $registro = null;
-        if ($registros == null) {
+        if (count($records) > 0) {
+            $almacen = Stock::find(1);
+        } else {
             $almacen = new Stock();
-        } else {
-            for ($i = 0; $i < count($registros); $i++) {
-                if ($registros[$i]->fecha == $request->fecha) {
-                    $stock = $registros[$i];
-                } else {
-                    $stock = null;
-                }
-            }
-            if ($stock == null) {
-                $almacen = new Stock();
-                $almacen->fecha = $request->fecha;
-            } else {
-                $almacen = Stock::find($stock->id);
-            }
         }
+        // var_dump(count($records));
 
-        if ($records == null) {
-            $regist = new StockRecords();
-        } else {
+        if ($records) {
+            $registro = null;
             for ($i = 0; $i < count($records); $i++) {
                 if ($records[$i]->fecha == $request->fecha) {
                     $registro = $records[$i];
-                } else {
-                    $registro = null;
                 }
             }
             if ($registro == null) {
@@ -350,6 +385,8 @@ class AdminController extends Controller
             } else {
                 $regist = StockRecords::find($registro->id);
             }
+        } else {
+            $regist = new StockRecords();
         }
 
         if ($cf) {
@@ -415,10 +452,10 @@ class AdminController extends Controller
                 $costo = $costo + $cost;
 
                 $nombre = $productos[$i]->name;
-                if ($almacen->$nombre == null) {
-                    $almacen->$nombre = $pesos[$i];
-                } else {
+                if ($almacen->$nombre) {
                     $almacen->$nombre = $almacen->$nombre + $pesos[$i];
+                } else {
+                    $almacen->$nombre = $pesos[$i];
                 }
                 if ($regist->$nombre == null) {
                     $regist->$nombre = $pesos[$i];
@@ -450,6 +487,7 @@ class AdminController extends Controller
             $nota->abono = 0;
             $nota->resta = $nota->debe - $nota->descuento;
         }
+        $almacen->fecha = $request->fecha;
         $almacen->save();
         $regist->save();
         $nota->save();
